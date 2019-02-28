@@ -2,6 +2,8 @@ const express = require('express')
 const logger = require('morgan')
 const errorhandler = require('errorhandler')
 const bodyParser = require('body-parser')
+const request = require('request');
+const spotify = require('./spotify');
 const PORT = process.env.PORT || 3005
 
 
@@ -12,31 +14,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(bodyParser.json())
-// app.use(logger('dev'))
-// app.use(errorhandler())
-
-
-const key = process.env.KEY1;
-const secret = process.env.KEY2;
-const request = require('request');
-const payload = key + ":" + secret;
-const encodedPayload = new Buffer(payload).toString("base64");
-
-
-let access_token = null;
-let timeOfTokenCreation = null;
-let message = null;
-
-const spotify_opts = {
-    url: "https://accounts.spotify.com/api/token",
-    method: "POST",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": "Basic " + encodedPayload
-    },
-    body: "grant_type=client_credentials&scope=playlist-modify-public playlist-modify-private",
-    json: true
-};
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -51,39 +28,33 @@ app.get('/yelp', (mainreq, mainres) => {
 })
 
 app.get('/spotify', (mainreq, mainres) => {
-    console.log(' ');
     const currentTime = Date.now()
 
-    if (!timeOfTokenCreation) {
-        timeOfTokenCreation = Date.now()
+    if (!spotify.timeOfTokenCreation) {
+        spotify.timeOfTokenCreation = Date.now()
     }
 
-    const tokenAgeInMinutes = Math.floor((Date.now() - timeOfTokenCreation)/60000)
+    const tokenAgeInMinutes = Math.floor((Date.now() - spotify.timeOfTokenCreation)/60000)
 
     /*
         these spotify tokens expire every hour, so we need to refresh them.
         To be safe, we won't send a token to the client
         if the token is more than 45 minutes old
     */
-    if (access_token && tokenAgeInMinutes < 45) {
-        console.log(tokenAgeInMinutes)
-
-        message.token_age_minutes = tokenAgeInMinutes
-        console.log('didnt refresh token: ', message);
-        mainres.status(200).send(JSON.stringify(message))
+    if (spotify.access_token && tokenAgeInMinutes < 45) {
+        spotify.message.token_age_minutes = tokenAgeInMinutes
+        mainres.status(200).send(JSON.stringify(spotify.message))
     } else {
-        timeOfTokenCreation = Date.now()
-        request(spotify_opts, function (err, res, body) {
-            access_token = body['access_token']
-            message = {
-                token: access_token,
+        spotify.timeOfTokenCreation = Date.now()
+        request(spotify.get_spotify_opts(), function (err, res, body) {
+            spotify.access_token = body['access_token']
+            spotify.message = {
+                token: spotify.access_token,
                 expires_in: body['expires_in'],
                 token_age_minutes: 0
             }
-            //message = JSON.stringify(message);
-            console.log('refreshing token: ', message);
             try {
-                mainres.status(200).send(JSON.stringify(message))
+                mainres.status(200).send(JSON.stringify(spotify.message))
             } catch(error) {
                 console.log("errored the first time: ", error)
             }
