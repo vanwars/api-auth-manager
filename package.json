@@ -1,5 +1,5 @@
 {
-  "name": "spotifyviz",
+  "name": "apimanager",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -16,7 +16,8 @@
     "errorhandler": "1.5.0",
     "express": "4.16.3",
     "morgan": "1.9.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "cryptiles": ">=4.1.2"
   },
   "devDependencies": {
     "node-dev": "^3.1.3"
