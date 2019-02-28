@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
 
 app.get('/yelp', (mainreq, mainres) => {
     mainres.status(200).send(JSON.stringify({
-        'token': process.env.YELP
+        'token': process.env.YELP_KEY
     }))
 })
 

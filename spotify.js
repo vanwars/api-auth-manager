@@ -3,8 +3,8 @@ exports.timeOfTokenCreation = null;
 exports.message = null;
 
 exports.get_spotify_opts = () => {
-    const key = process.env.KEY1;
-    const secret = process.env.KEY2;
+    const key = process.env.SPOTIFY_KEY;
+    const secret = process.env.SPOTIFY_SECRET;
     const payload = key + ":" + secret;
     const encodedPayload = new Buffer(payload).toString("base64");
 
