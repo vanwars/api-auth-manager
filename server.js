@@ -27,7 +27,7 @@ let access_token = null;
 let timeOfTokenCreation = null;
 let message = null;
 
-const opts = {
+const spotify_opts = {
     url: "https://accounts.spotify.com/api/token",
     method: "POST",
     headers: {
@@ -44,7 +44,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/token', (mainreq, mainres) => {
+app.get('/yelp', (mainreq, mainres) => {
+    mainres.status(200).send(JSON.stringify({
+        'token': process.env.YELP
+    }))
+})
+
+app.get('/spotify', (mainreq, mainres) => {
     console.log(' ');
     const currentTime = Date.now()
 
@@ -53,9 +59,6 @@ app.get('/token', (mainreq, mainres) => {
     }
 
     const tokenAgeInMinutes = Math.floor((Date.now() - timeOfTokenCreation)/60000)
-
-    console.log('tokenAgeInMinutes', tokenAgeInMinutes)
-    console.log(Date.now())
 
     /*
         these spotify tokens expire every hour, so we need to refresh them.
@@ -70,7 +73,7 @@ app.get('/token', (mainreq, mainres) => {
         mainres.status(200).send(JSON.stringify(message))
     } else {
         timeOfTokenCreation = Date.now()
-        request(opts, function (err, res, body) {
+        request(spotify_opts, function (err, res, body) {
             access_token = body['access_token']
             message = {
                 token: access_token,
