@@ -17,59 +17,59 @@ exports.get_opts = (url, key, secret, grant_type) => {
 };
 
 
-const _issue_request = (mainreq, mainres, credentialer, isProxy=false) => {
-    if (!credentialer.timeOfTokenCreation) {
-        credentialer.timeOfTokenCreation = Date.now()
+const _issue_request = (mainreq, mainres, api_wrapper, isProxy=false) => {
+    if (!api_wrapper.timeOfTokenCreation) {
+        api_wrapper.timeOfTokenCreation = Date.now()
     }
 
-    const tokenAgeInMinutes = Math.floor((Date.now() - credentialer.timeOfTokenCreation)/60000)
+    const tokenAgeInMinutes = Math.floor((Date.now() - api_wrapper.timeOfTokenCreation)/60000)
 
     /*
         these twitter tokens expire every hour, so we need to refresh them.
         To be safe, we won't send a token to the client
         if the token is more than 45 minutes old
     */
-    if (credentialer.access_token && tokenAgeInMinutes < 45) {
-        credentialer.message.token_age_minutes = tokenAgeInMinutes
+    if (api_wrapper.access_token && tokenAgeInMinutes < 45) {
+        api_wrapper.message.token_age_minutes = tokenAgeInMinutes
         if (!isProxy) {
-            mainres.status(200).send(JSON.stringify(credentialer.message))
+            mainres.status(200).send(JSON.stringify(api_wrapper.message))
         } else {
-            _forward(mainreq, mainres, credentialer);
+            _forward(mainreq, mainres, api_wrapper);
         }
     } else {
-        credentialer.timeOfTokenCreation = Date.now()
-        request(credentialer.get_opts(), (err, res, body) => {
-            credentialer.access_token = body['access_token']
-            credentialer.message = {
-                token: credentialer.access_token,
+        api_wrapper.timeOfTokenCreation = Date.now()
+        request(api_wrapper.get_opts(), (err, res, body) => {
+            api_wrapper.access_token = body['access_token']
+            api_wrapper.message = {
+                token: api_wrapper.access_token,
                 expires_in: body['expires_in'],
                 token_age_minutes: 0
             }
             if (!isProxy) {
                 try {
-                    mainres.status(200).send(JSON.stringify(credentialer.message))
+                    mainres.status(200).send(JSON.stringify(api_wrapper.message))
                 } catch(error) {
                     console.log("errored the first time: ", error)
                 }
             } else {
-                _forward(mainreq, mainres, credentialer);
+                _forward(mainreq, mainres, api_wrapper);
             }
         });
     }
 };
 
-const _forward = (mainreq, mainres, credentialer) => {
-    if (!credentialer.access_token) {
+const _forward = (mainreq, mainres, api_wrapper) => {
+    if (!api_wrapper.access_token) {
         throw new Error('access_token has not been set');
     }
-    const url = credentialer.baseURI + mainreq.url.replace(credentialer.proxyURI, '');
+    const url = api_wrapper.baseURI + mainreq.url.replace(api_wrapper.proxyURI, '');
     options = {
         headers: {
-            authorization: util.format('Bearer %s', credentialer.access_token),
+            authorization: util.format('Bearer %s', api_wrapper.access_token),
             'content-type': 'application/json'
         }
     };
-    request(url, options, function (error, response, body) { 
+    request(url, options, (error, response, body) => { 
         if (!error && response.statusCode === 200) { 
             mainres.status(200).send(body); 
         } else {
@@ -80,10 +80,10 @@ const _forward = (mainreq, mainres, credentialer) => {
     });
 };
 
-exports.get_token = (mainreq, mainres, credentialer) => {
-    _issue_request(mainreq, mainres, credentialer, isProxy=false)
+exports.get_token = (mainreq, mainres, api_wrapper) => {
+    _issue_request(mainreq, mainres, api_wrapper, isProxy=false)
 };
 
-exports.forward_request = (mainreq, mainres, credentialer) => {
-    _issue_request(mainreq, mainres, credentialer, isProxy=true)
+exports.forward_request = (mainreq, mainres, api_wrapper) => {
+    _issue_request(mainreq, mainres, api_wrapper, isProxy=true)
 };

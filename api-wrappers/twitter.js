@@ -1,4 +1,4 @@
-const credentials = require('./index');
+const api_wrapper = require('./index');
 
 exports.access_token = null;
 exports.timeOfTokenCreation = null;
@@ -6,11 +6,13 @@ exports.message = null;
 exports.baseURI = 'https://api.twitter.com/'
 exports.proxyURI = '/twitter-proxy'
 
-exports.forward_request = credentials.forward_request;
-exports.get_token = credentials.get_token;
+exports.forward_request = (mainreq, mainres) => {
+    api_wrapper.forward_request(mainreq, mainres, exports);
+}
+exports.get_token = api_wrapper.get_token;
 
 exports.get_opts = () => {
-    return credentials.get_opts(
+    return api_wrapper.get_opts(
         exports.baseURI + 'oauth2/token',
         process.env.TWITTER_KEY,
         process.env.TWITTER_SECRET,
