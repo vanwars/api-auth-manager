@@ -10,11 +10,11 @@ exports.keyURI = '/spotify';
 exports.get_token = api_wrapper.get_token;
 
 exports.get_key_url = (mainreq) => {
-    base = mainreq.protocol + '://' + mainreq.get('host')
+    base = '//' + mainreq.get('host')
     return base + exports.keyURI
 };
 exports.get_url = (mainreq) => {
-    base = mainreq.protocol + '://' + mainreq.get('host')
+    base = '//' + mainreq.get('host')
     return base + exports.proxyURI + '/'
 };
 exports.get_sample_url = (mainreq) => {

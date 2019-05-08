@@ -4,13 +4,13 @@ body {
     margin: 0;
 }
 main {
-    width: 600px;
+    width: 700px;
     margin: auto;
     min-height: 100vh;
     padding-bottom: 50px;
 }
 table {
-    width: 600px;
+    width: 700px;
     border-collapse: collapse;
     border-radius: 15px;
 }

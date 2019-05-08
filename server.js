@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 var handlebars  = require('express-handlebars');
 
+const yelp = require('./api-wrappers/yelp');
 const spotify = require('./api-wrappers/spotify');
 const twitter = require('./api-wrappers/twitter');
 const flickr = require('./api-wrappers/flickr');
@@ -25,82 +26,83 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', (mainreq, mainres) => {
-    base = mainreq.protocol + '://' + mainreq.get('host')
+    base = '//' + mainreq.get('host')
     instructions = {
         'yelp': {
             'name': 'Yelp',
-            'key': base + '/yelp',
+            'key': yelp.get_key_url(mainreq),
+            'source': yelp.baseURI,
+            'proxy': yelp.get_url(mainreq),
+            'example': yelp.get_sample_url(mainreq)
         },
         'spotify': {
             'name': 'Spotify',
             'key': spotify.get_key_url(mainreq),
+            'source': spotify.baseURI,
             'proxy': spotify.get_url(mainreq),
             'example': spotify.get_sample_url(mainreq)
         },
         'twitter': {
             'name': 'Twitter',
             'key': twitter.get_key_url(mainreq),
+            'source': twitter.baseURI,
             'proxy': twitter.get_url(mainreq),
             'example': twitter.get_sample_url(mainreq)
         },
         'flickr-standard': {
             'name': 'Flickr',
-            'proxy': base + '/flickr-proxy/',
-            'example': base + '/flickr-proxy/?tags=cat'
+            'source': flickr.baseURI,
+            'proxy': flickr.get_url(mainreq),
+            'example': flickr.get_sample_url(mainreq)
         },
         'flickr-simplified': {
             'name': 'Flickr Simplified',
-            'proxy': base + '/flickr-proxy-simple/',
-            'example': base + '/flickr-proxy-simple/?tags=cat'
+            'source': flickr.baseURI,
+            'proxy': flickr.get_url_simple(mainreq),
+            'example': flickr.get_sample_url_simple(mainreq)
         }
     }
-    // mainres.status(200).send(JSON.stringify(instructions));
     mainres.render('index', { 
-        title: 'Hey', 
-        message: 'Hello there!',
-        //instructions: JSON.stringify(instructions, null, 4),
+        title: 'Proxy Helpers Documentation', 
         instructions: instructions
     })
 
 });
 
-app.get('/yelp', (mainreq, mainres) => {
+app.get(yelp.keyURI, (mainreq, mainres) => {
     mainres.status(200).send(JSON.stringify({
-        'token': process.env.YELP_KEY
+        'token': yelp.get_key()
     }));
 });
 
-app.get('/spotify', (mainreq, mainres) => {
+app.get(spotify.keyURI, (mainreq, mainres) => {
     spotify.get_token(mainreq, mainres, spotify);
 });
 
-app.get('/twitter', (mainreq, mainres) => {
+app.get(twitter.keyURI, (mainreq, mainres) => {
     twitter.get_token(mainreq, mainres, twitter);
 });
 
-app.get('/spotify-proxy*', (mainreq, mainres) => {
-    // Original:    https://api.spotify.com/v1/search?q=beyonce&type=track  
-    // Proxy:       http://localhost:3005/spotify-proxy/v1/search?q=beyonce&type=track
+app.get(yelp.proxyURI + '/*', (mainreq, mainres) => {
+    yelp.forward_request(mainreq, mainres);
+});
+
+app.get(spotify.proxyURI + '/*', (mainreq, mainres) => {
     spotify.forward_request(mainreq, mainres);
 });
 
-app.get('/twitter-proxy*', (mainreq, mainres) => {
-    // Original:    https://api.twitter.com/1.1/search/tweets.json?q=rainbows
-    // Proxy:       http://localhost:3005/twitter-proxy/1.1/search/tweets.json?q=rainbows
+app.get(twitter.proxyURI + '/*', (mainreq, mainres) => {
     twitter.forward_request(mainreq, mainres);
 });
 
 app.get('/flickr-proxy-simple/*', (mainreq, mainres) => {
-    // Original:    https://api.flickr.com/services/feeds/photos_public.gne?tags=rainbow&format=json
-    // Proxy:       http://localhost:3005/flickr-proxy-simple/?tags=rainbow
     flickr.forward_request_and_simplify(mainreq, mainres);
 });
 
-app.get('/flickr-proxy/*', (mainreq, mainres) => {
-    // Original:    https://api.flickr.com/services/feeds/photos_public.gne?tags=rainbow&format=json
-    // Proxy:       http://localhost:3005/flickr-proxy/?tags=rainbow
+app.get(flickr.proxyURI + '/*', (mainreq, mainres) => {
     flickr.forward_request(mainreq, mainres);
 });
+
 app.listen(PORT, () => {
     console.log(`API Helper App listening on port ${PORT}!`)
 });

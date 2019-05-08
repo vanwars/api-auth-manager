@@ -10,11 +10,19 @@
     {{#each instructions}}
         <h2>{{this.name}}</h2>
         <table>
-            {{#if this.key}}
+            {{!-- {{#if this.key}}
                 <tr>
                     <th>Key</th> 
                     <td>
-                        <a href="{{this.key}}" target="_blank">{{this.key}}</a>
+                        <a href="{{this.key}}">{{this.key}}</a>
+                    </td>
+                </tr>
+            {{/if}} --}}
+            {{#if this.source}}
+                <tr>
+                    <th>Source</th> 
+                    <td>
+                        {{this.source}}
                     </td>
                 </tr>
             {{/if}}
@@ -22,7 +30,7 @@
                 <tr>
                     <th>Proxy</th> 
                     <td>
-                        <a href="{{this.proxy}}" target="_blank">{{this.proxy}}</a>
+                        {{this.proxy}}
                     </td>
                 </tr>
             {{/if}}
@@ -30,7 +38,7 @@
                 <tr>
                     <th>Proxy Example</th> 
                     <td>
-                        <a href="{{this.example}}" target="_blank">{{this.example}}</a>
+                        <a href="{{this.example}}">{{this.example}}</a>
                     </td>
                 </tr>
             {{/if}}
