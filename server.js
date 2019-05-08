@@ -10,7 +10,7 @@ const youtube = require('./api-wrappers/youtube');
 const PORT = process.env.PORT || 3005
 
 const app = express()
-app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
 app.use('/static', express.static('views'))
 
@@ -31,6 +31,7 @@ app.get('/', (mainreq, mainres) => {
     instructions = {
         'yelp': {
             'name': 'Yelp',
+            'icon': '<i class="fab fa-yelp"></i>',
             'documentation': yelp.documentationURI,
             'key': yelp.get_key_url(mainreq),
             'source': yelp.baseURI,
@@ -39,6 +40,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'spotify': {
             'name': 'Spotify',
+            'icon': '<i class="fab fa-spotify"></i>',
             'documentation': spotify.documentationURI,
             'key': spotify.get_key_url(mainreq),
             'source': spotify.baseURI,
@@ -47,6 +49,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'twitter': {
             'name': 'Twitter',
+            'icon': '<i class="fab fa-twitter"></i>',
             'documentation': twitter.documentationURI,
             'key': twitter.get_key_url(mainreq),
             'source': twitter.baseURI,
@@ -55,6 +58,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'youtube-standard': {
             'name': 'YouTube',
+            'icon': '<i class="fab fa-youtube"></i>',
             'documentation': youtube.documentationURI,
             'source': youtube.baseURI,
             'proxy': youtube.get_url(mainreq),
@@ -62,6 +66,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'youtube-simplified': {
             'name': 'YouTube Simplified',
+            'icon': '<i class="fab fa-youtube"></i>',
             'documentation': youtube.documentationURI,
             'source': youtube.baseURI,
             'proxy': youtube.get_url_simple(mainreq),
@@ -69,6 +74,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'flickr-standard': {
             'name': 'Flickr',
+            'icon': '<i class="fab fa-flickr"></i>',
             'documentation': flickr.documentationURI,
             'source': flickr.baseURI,
             'proxy': flickr.get_url(mainreq),
@@ -76,6 +82,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'flickr-simplified': {
             'name': 'Flickr Simplified',
+            'icon': '<i class="fab fa-flickr"></i>',
             'documentation': flickr.documentationURI,
             'source': flickr.baseURI,
             'proxy': flickr.get_url_simple(mainreq),
@@ -83,7 +90,6 @@ app.get('/', (mainreq, mainres) => {
         }
     }
     mainres.render('index', { 
-        title: 'Proxy Helpers Documentation', 
         instructions: instructions
     })
 
