@@ -2,26 +2,51 @@ body {
     font-family: Arial;
     font-size: 1.1em;
     margin: 0;
+    background: #F8F8F8;
 }
 main {
     width: 700px;
     margin: auto;
+    margin-top: 90px;
     min-height: 100vh;
     padding-bottom: 50px;
 }
 table {
     width: 700px;
     border-collapse: collapse;
-    border-radius: 15px;
 }
 td, th {
-    border: solid 1px #CCC;
-    padding: 4px;
-    border-radius: 15px;
+    border: solid 1px #EEE;
+    padding: 8px;
+    font-size: 0.9em;
+    background: white;
 }
-
 th {
     width: 140px;
     text-align: right;
     font-weight: 500;
+    color: #222;
+}
+td {
+    color: #555;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+header {
+    background: #444;
+    margin-bottom: 80px;
+    position: fixed;
+    height: 60px;
+    width: 100vw;
+    top: 0px;
+}
+header h1 {
+    color: white;
+    margin: 0px;
+    line-height: 60px;
+    text-align: center;
 }

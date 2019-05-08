@@ -31,6 +31,7 @@ app.get('/', (mainreq, mainres) => {
     instructions = {
         'yelp': {
             'name': 'Yelp',
+            'documentation': yelp.documentationURI,
             'key': yelp.get_key_url(mainreq),
             'source': yelp.baseURI,
             'proxy': yelp.get_url(mainreq),
@@ -38,6 +39,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'spotify': {
             'name': 'Spotify',
+            'documentation': spotify.documentationURI,
             'key': spotify.get_key_url(mainreq),
             'source': spotify.baseURI,
             'proxy': spotify.get_url(mainreq),
@@ -45,6 +47,7 @@ app.get('/', (mainreq, mainres) => {
         },
         'twitter': {
             'name': 'Twitter',
+            'documentation': twitter.documentationURI,
             'key': twitter.get_key_url(mainreq),
             'source': twitter.baseURI,
             'proxy': twitter.get_url(mainreq),
@@ -52,24 +55,28 @@ app.get('/', (mainreq, mainres) => {
         },
         'youtube-standard': {
             'name': 'YouTube',
+            'documentation': youtube.documentationURI,
             'source': youtube.baseURI,
             'proxy': youtube.get_url(mainreq),
             'example': youtube.get_sample_url(mainreq)
         },
         'youtube-simplified': {
             'name': 'YouTube Simplified',
+            'documentation': youtube.documentationURI,
             'source': youtube.baseURI,
             'proxy': youtube.get_url_simple(mainreq),
             'example': youtube.get_sample_url_simple(mainreq)
         },
         'flickr-standard': {
             'name': 'Flickr',
+            'documentation': flickr.documentationURI,
             'source': flickr.baseURI,
             'proxy': flickr.get_url(mainreq),
             'example': flickr.get_sample_url(mainreq)
         },
         'flickr-simplified': {
             'name': 'Flickr Simplified',
+            'documentation': flickr.documentationURI,
             'source': flickr.baseURI,
             'proxy': flickr.get_url_simple(mainreq),
             'example': flickr.get_sample_url_simple(mainreq)

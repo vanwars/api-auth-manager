@@ -6,21 +6,24 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+    <header>
+        <h1>API Helper</h1>
+    </header>
     <main>
     {{#each instructions}}
         <h2>{{this.name}}</h2>
         <table>
-            {{!-- {{#if this.key}}
+            {{#if this.documentation}}
                 <tr>
-                    <th>Key</th> 
+                    <th>Documentation</th> 
                     <td>
-                        <a href="{{this.key}}">{{this.key}}</a>
+                        <a href="{{this.documentation}}" target="_blank">{{this.documentation}}</a>
                     </td>
                 </tr>
-            {{/if}} --}}
+            {{/if}}
             {{#if this.source}}
                 <tr>
-                    <th>Source</th> 
+                    <th>Endpoint</th> 
                     <td>
                         {{this.source}}
                     </td>

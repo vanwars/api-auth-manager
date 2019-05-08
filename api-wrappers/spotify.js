@@ -6,6 +6,7 @@ exports.message = null;
 exports.baseURI = 'https://api.spotify.com';
 exports.proxyURI = '/spotify-proxy'
 exports.keyURI = '/spotify';
+exports.documentationURI = 'https://developer.spotify.com/documentation/web-api/reference/search/search/';
 
 exports.get_token = api_wrapper.get_token;
 

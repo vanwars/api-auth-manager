@@ -2,7 +2,8 @@ const request = require('request');
 
 exports.baseURI = 'https://api.flickr.com/services/feeds/photos_public.gne';
 exports.proxyURI = '/flickr-proxy';
-exports.proxyURISimple = exports.proxyURI + '-simple/';
+exports.proxyURISimple = exports.proxyURI + '-simple';
+exports.documentationURI = 'https://www.flickr.com/services/feeds/docs/photos_public/'
 
 exports.get_url = (mainreq) => {
     base = '//' + mainreq.get('host')
@@ -10,7 +11,7 @@ exports.get_url = (mainreq) => {
 };
 exports.get_url_simple = (mainreq) => {
     base = '//' + mainreq.get('host')
-    return base + exports.proxyURISimple
+    return base + exports.proxyURISimple + '/'
 };
 exports.get_sample_url = (mainreq) => {
     return exports.get_url(mainreq) + '?tags=cat'

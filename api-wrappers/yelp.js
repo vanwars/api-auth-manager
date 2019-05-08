@@ -4,6 +4,7 @@ const util = require('util');
 exports.baseURI = 'https://api.yelp.com';
 exports.proxyURI = '/yelp-proxy';
 exports.keyURI = '/yelp';
+exports.documentationURI = 'https://www.yelp.com/developers/documentation/v3/business_search'
 
 exports.get_key_url = (mainreq) => {
     base = '//' + mainreq.get('host')

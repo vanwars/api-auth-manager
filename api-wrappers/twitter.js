@@ -6,6 +6,7 @@ exports.message = null;
 exports.baseURI = 'https://api.twitter.com';
 exports.proxyURI = '/twitter-proxy';
 exports.keyURI = '/twitter';
+exports.documentationURI = 'https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html';
 
 exports.get_token = api_wrapper.get_token;
 

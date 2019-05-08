@@ -4,6 +4,7 @@ const request = require('request');
 exports.baseURI = 'https://www.googleapis.com/youtube/v3/search';
 exports.proxyURI = '/youtube-proxy';
 exports.proxyURISimple = exports.proxyURI + '-simple/';
+exports.documentationURI = 'https://developers.google.com/youtube/v3/docs/search/list'
 
 exports.get_url = (mainreq) => {
     base = '//' + mainreq.get('host')
