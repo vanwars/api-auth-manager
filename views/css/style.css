@@ -8,14 +8,14 @@ h1, h2 {
     font-family: 'Roboto', sans-serif;
 }
 main {
-    width: 700px;
+    width: 800px;
     margin: auto;
     margin-top: 90px;
     min-height: 100vh;
     padding-bottom: 50px;
 }
 table {
-    width: 700px;
+    width: 800px;
     border-collapse:separate;
     border:solid #EEE 1px;
     border-radius: 6px;
