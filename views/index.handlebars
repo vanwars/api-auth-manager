@@ -5,7 +5,10 @@
     <title>API Helper</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/color-brewer.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
+
 </head>
 <body>
     <header>
@@ -46,9 +49,29 @@
                         <a href="{{this.example}}">{{this.example}}</a>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <pre><code class="html">&lt;-- How to query endpoint w/JavaScript fetch API --&gt;
+&lt;script type="text/javascript"&gt;
+    fetch('{{this.example}}')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+&lt;/script&gt;
+</code></pre>
+                    </td>
+                </tr>
             {{/if}}
         </table>
     {{/each}}
     </main>
+    <script lang="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script lang="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/javascript.min.js"></script>
+    <script lang="text/javascript">
+        for (elem of document.querySelectorAll('code')) {
+            hljs.highlightBlock(elem);
+        }
+    </script>
 </body>
 </html>

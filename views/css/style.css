@@ -32,11 +32,21 @@ td, th {
 }
 
 th {
-    width: 140px;
+    width: 150px;
     text-align: right;
     font-weight: 600;
     color: #222;
     border-left: none;
+}
+td:first-child {
+    border-left: none; 
+}
+code {
+    margin: 20px;
+    font-size: 1.2em;
+}
+.hljs {
+    background: white;
 }
 tr:first-child th, tr:first-child td {
     border-top: none; 
