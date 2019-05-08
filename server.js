@@ -6,6 +6,7 @@ const yelp = require('./api-wrappers/yelp');
 const spotify = require('./api-wrappers/spotify');
 const twitter = require('./api-wrappers/twitter');
 const flickr = require('./api-wrappers/flickr');
+const youtube = require('./api-wrappers/youtube');
 const PORT = process.env.PORT || 3005
 
 const app = express()
@@ -48,6 +49,18 @@ app.get('/', (mainreq, mainres) => {
             'source': twitter.baseURI,
             'proxy': twitter.get_url(mainreq),
             'example': twitter.get_sample_url(mainreq)
+        },
+        'youtube-standard': {
+            'name': 'YouTube',
+            'source': youtube.baseURI,
+            'proxy': youtube.get_url(mainreq),
+            'example': youtube.get_sample_url(mainreq)
+        },
+        'youtube-simplified': {
+            'name': 'YouTube Simplified',
+            'source': youtube.baseURI,
+            'proxy': youtube.get_url_simple(mainreq),
+            'example': youtube.get_sample_url_simple(mainreq)
         },
         'flickr-standard': {
             'name': 'Flickr',
@@ -95,7 +108,15 @@ app.get(twitter.proxyURI + '/*', (mainreq, mainres) => {
     twitter.forward_request(mainreq, mainres);
 });
 
-app.get('/flickr-proxy-simple/*', (mainreq, mainres) => {
+app.get(youtube.proxyURISimple + '*', (mainreq, mainres) => {
+    youtube.forward_request_and_simplify(mainreq, mainres);
+});
+
+app.get(youtube.proxyURI + '/*', (mainreq, mainres) => {
+    youtube.forward_request(mainreq, mainres);
+});
+
+app.get(flickr.proxyURISimple + '/*', (mainreq, mainres) => {
     flickr.forward_request_and_simplify(mainreq, mainres);
 });
 
