@@ -13,11 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "1.18.2",
+    "cryptiles": ">=4.1.2",
     "errorhandler": "1.5.0",
     "express": "4.16.3",
+    "express-handlebars": "^3.0.2",
     "morgan": "1.9.0",
-    "request": "^2.85.0",
-    "cryptiles": ">=4.1.2"
+    "request": "^2.85.0"
   },
   "devDependencies": {
     "node-dev": "^3.1.3"

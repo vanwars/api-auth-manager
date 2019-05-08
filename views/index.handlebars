@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{{ title }}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <main>
+    {{#each instructions}}
+        <h2>{{this.name}}</h2>
+        <table>
+            {{#if this.key}}
+                <tr>
+                    <th>Key</th> 
+                    <td>
+                        <a href="{{this.key}}" target="_blank">{{this.key}}</a>
+                    </td>
+                </tr>
+            {{/if}}
+            {{#if this.proxy}}
+                <tr>
+                    <th>Proxy</th> 
+                    <td>
+                        <a href="{{this.proxy}}" target="_blank">{{this.proxy}}</a>
+                    </td>
+                </tr>
+            {{/if}}
+            {{#if this.example}}
+                <tr>
+                    <th>Proxy Example</th> 
+                    <td>
+                        <a href="{{this.example}}" target="_blank">{{this.example}}</a>
+                    </td>
+                </tr>
+            {{/if}}
+        </table>
+    {{/each}}
+    </main>
+</body>
+</html>
