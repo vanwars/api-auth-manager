@@ -8,7 +8,7 @@ h1, h2 {
     font-family: 'Roboto', sans-serif;
 }
 main {
-    width: 70vw;
+    width: 65vw;
     margin: auto;
     margin-top: 90px;
     min-height: 100vh;
@@ -29,8 +29,7 @@ td, th {
     border-top:solid #EEE 1px;
     padding: 8px;
     font-size: 0.9em;
-    word-wrap: break-word;
-    word-break: break-all;
+    vertical-align: top;
 }
 
 th {
@@ -111,7 +110,15 @@ h2 {
 
 
 @media (max-width: 800px) {
+    /* body {
+        background: white;
+    } */
+    table, th, td {
+        vertical-align: top;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
     main {
-        width: 90vw;
+        width: 95vw;
     }
 }
