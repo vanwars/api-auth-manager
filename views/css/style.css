@@ -8,14 +8,14 @@ h1, h2 {
     font-family: 'Roboto', sans-serif;
 }
 main {
-    width: 800px;
+    width: 70vw;
     margin: auto;
     margin-top: 90px;
     min-height: 100vh;
     padding-bottom: 50px;
 }
 table {
-    width: 800px;
+    width: 100%;
     border-collapse:separate;
     border:solid #EEE 1px;
     border-radius: 6px;
@@ -29,10 +29,12 @@ td, th {
     border-top:solid #EEE 1px;
     padding: 8px;
     font-size: 0.9em;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 th {
-    width: 150px;
+    width: 120px;
     text-align: right;
     font-weight: 600;
     color: #222;
@@ -44,6 +46,10 @@ td:first-child {
 code {
     margin: 20px;
     font-size: 1.2em;
+    white-space: pre-wrap;
+    /* overflow: hidden; */
+    word-wrap: break-word;
+    /* width: 70vw; */
 }
 .hljs {
     background: white;
@@ -101,4 +107,11 @@ h2 {
 }
 .fa-spotify {
     color: #1ed15d;
+}
+
+
+@media (max-width: 800px) {
+    main {
+        width: 90vw;
+    }
 }
