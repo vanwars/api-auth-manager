@@ -2,9 +2,11 @@
 
 ## Current Support
 Current support for:
-* Spotify /spotify
-* Yelp /yelp
-* Twitter /twitter
+* Spotify
+* Yelp
+* Twitter
+* Flickr
+* YouTube
 
 ## Run Locally
 * node server.js (configured to run on port 3005)
@@ -12,4 +14,4 @@ Current support for:
 
 ## Run on Heroku
 
-Hosted on Heroku: [https://eecs110-apis.herokuapp.com/](https://eecs110-apis.herokuapp.com/)
+Hosted on Heroku: [https://www.apitutor.org](https://www.apitutor.org)
