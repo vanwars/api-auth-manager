@@ -10,7 +10,7 @@ const get_url = (mainreq) => {
     return '//' + mainreq.get('host') + exports.proxyURI + '/';
 };
 const get_url_simple = (mainreq) => {
-    return '//' + mainreq.get('host') + exports.proxyURISimple;
+    return '//' + mainreq.get('host') + exports.proxyURISimple + '/';
 };
 const get_key = () => {
     return process.env.YOUTUBE_KEY;
