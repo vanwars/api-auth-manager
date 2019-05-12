@@ -22,6 +22,10 @@ const forward_request = (mainreq, mainres) => {
 const forward_request_and_simplify = (mainreq, mainres) => {
     _issue_request(mainreq, mainres, exports.proxyURISimple + '/', _simplify);
 };
+
+const forward_request_and_simplify_backwards_compatible = (mainreq, mainres) => {
+    _issue_request(mainreq, mainres, exports.proxyURISimpleOld + '/', _simplify);
+};
 const _issue_request = (mainreq, mainres, proxyURI, parser) => {
     let url = exports.baseURI + mainreq.url.replace(proxyURI, '');
     url += '&format=json'
@@ -61,6 +65,7 @@ const _simplify = (body) => {
 exports.baseURI = 'https://api.flickr.com/services/feeds/photos_public.gne';
 exports.proxyURI = '/flickr';
 exports.proxyURISimple = exports.proxyURI + '/simple';
+exports.proxyURISimpleOld = exports.proxyURI + '-proxy-simple';
 
 exports.get_documentation = (mainreq, doc_type='standard') => {
     if (doc_type === 'simple') {
@@ -94,6 +99,9 @@ exports.get_documentation = (mainreq, doc_type='standard') => {
 exports.routes = [{
     'url': exports.proxyURISimple + '/*',
     'routing_function': forward_request_and_simplify
+}, {
+    'url': exports.proxyURISimpleOld + '/*',
+    'routing_function': forward_request_and_simplify_backwards_compatible
 }, {
     'url': exports.proxyURI + '/*',
     'routing_function': forward_request

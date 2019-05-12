@@ -32,6 +32,7 @@ app.get('/', (mainreq, mainres) => {
 });
 
 // Dynamically generate routes:
+// console.log(apis.get_routes());
 for (route of apis.get_routes()) {
     app.get(route.url, route.routing_function);
 }
