@@ -2,11 +2,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 var handlebars  = require('express-handlebars');
 
-const yelp = require('./api-wrappers/yelp');
-const spotify = require('./api-wrappers/spotify');
-const twitter = require('./api-wrappers/twitter');
-const flickr = require('./api-wrappers/flickr');
-const youtube = require('./api-wrappers/youtube');
 const apis = require('./api-wrappers/config');
 const PORT = process.env.PORT || 3005
 
@@ -37,44 +32,9 @@ app.get('/', (mainreq, mainres) => {
 });
 
 // Dynamically generate routes:
-for (route of spotify.routes) {
+for (route of apis.get_routes()) {
     app.get(route.url, route.routing_function);
 }
-for (route of yelp.routes) {
-    app.get(route.url, route.routing_function);
-}
-for (route of youtube.routes) {
-    app.get(route.url, route.routing_function);
-}
-for (route of flickr.routes) {
-    app.get(route.url, route.routing_function);
-}
-
-
-
-app.get(twitter.keyURI, (mainreq, mainres) => {
-    twitter.get_token(mainreq, mainres, twitter);
-});
-
-app.get(twitter.proxyURI + '/*', (mainreq, mainres) => {
-    twitter.forward_request(mainreq, mainres);
-});
-
-// app.get(youtube.proxyURISimple + '*', (mainreq, mainres) => {
-//     youtube.forward_request_and_simplify(mainreq, mainres);
-// });
-
-// app.get(youtube.proxyURI + '/*', (mainreq, mainres) => {
-//     youtube.forward_request(mainreq, mainres);
-// });
-
-// app.get(flickr.proxyURISimple + '/*', (mainreq, mainres) => {
-//     flickr.forward_request_and_simplify(mainreq, mainres);
-// });
-
-// app.get(flickr.proxyURI + '/*', (mainreq, mainres) => {
-//     flickr.forward_request(mainreq, mainres);
-// });
 
 app.listen(PORT, () => {
     console.log(`API Helper App listening on port ${PORT}!`)

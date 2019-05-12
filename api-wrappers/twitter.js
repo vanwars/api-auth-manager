@@ -4,25 +4,29 @@ exports.access_token = null;
 exports.timeOfTokenCreation = null;
 exports.message = null;
 exports.baseURI = 'https://api.twitter.com';
-exports.proxyURI = '/twitter-proxy';
-exports.keyURI = '/twitter';
-exports.documentationURI = 'https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html';
+exports.proxyURI = '/twitter';
 
-exports.get_token = api_wrapper.get_token;
+const keyURI = '/twitter/key';
+const documentationURI = 'https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html';
 
-exports.get_key_url = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.keyURI
-};
-exports.get_url = (mainreq) => {
+// const get_key_url = (mainreq) => {
+//     base = '//' + mainreq.get('host')
+//     return base + exports.keyURI
+// };
+
+const get_url = (mainreq) => {
     base = '//' + mainreq.get('host')
     return base + exports.proxyURI + '/'
 };
-exports.get_sample_url = (mainreq) => {
-    return exports.get_url(mainreq) + '1.1/search/tweets.json?q=cats'
+const get_sample_url = (mainreq) => {
+    return get_url(mainreq) + '1.1/search/tweets.json?q=cats'
 };
 
-exports.forward_request = (mainreq, mainres) => {
+const get_token = (mainreq, mainres) => {
+    api_wrapper.get_token(mainreq, mainres, exports);
+};
+
+const forward_request = (mainreq, mainres) => {
     api_wrapper.forward_request(mainreq, mainres, exports);
 };
 
@@ -34,3 +38,28 @@ exports.get_opts = () => {
         'client_credentials'
     );
 };
+
+exports.get_documentation = (mainreq, doc_type='standard') => {
+    if (doc_type === 'standard') {
+        return {
+            'name': 'Twitter',
+            'icon': '<i class="fab fa-twitter"></i>',
+            'endpoints': [{
+                'name': 'Tweet Search',
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url(mainreq),
+                'example': get_sample_url(mainreq)
+            }]
+        };
+    }
+};
+
+// Order matter! Key First.
+exports.routes = [{
+    'url': keyURI,
+    'routing_function': get_token
+}, {
+    'url': exports.proxyURI + '/*',
+    'routing_function': forward_request
+}];

@@ -35,7 +35,7 @@ exports.get_opts = (url, key, secret, grant_type) => {
 };
 
 
-const _issue_request = (mainreq, mainres, api_wrapper, isProxy=false) => {
+const _issue_request = (mainreq, mainres, api_wrapper, isProxy=false, parser=null, proxyURI=null) => {
     if (!api_wrapper.timeOfTokenCreation) {
         api_wrapper.timeOfTokenCreation = Date.now()
     }
@@ -52,7 +52,7 @@ const _issue_request = (mainreq, mainres, api_wrapper, isProxy=false) => {
         if (!isProxy) {
             mainres.status(200).send(JSON.stringify(api_wrapper.message))
         } else {
-            _forward(mainreq, mainres, api_wrapper);
+            _forward(mainreq, mainres, api_wrapper, parser, proxyURI);
         }
     } else {
         api_wrapper.timeOfTokenCreation = Date.now()
@@ -70,28 +70,34 @@ const _issue_request = (mainreq, mainres, api_wrapper, isProxy=false) => {
                     console.log("errored the first time: ", error)
                 }
             } else {
-                _forward(mainreq, mainres, api_wrapper);
+                _forward(mainreq, mainres, api_wrapper, parser, proxyURI);
             }
         });
     }
 };
 
-const _forward = (mainreq, mainres, api_wrapper) => {
+const _forward = (mainreq, mainres, api_wrapper, parser=null, proxyURI=null) => {
     if (!api_wrapper.access_token) {
         throw new Error('access_token has not been set');
     }
-    const url = api_wrapper.baseURI + mainreq.url.replace(api_wrapper.proxyURI, '');
+    const url = api_wrapper.baseURI + mainreq.url.replace(proxyURI || api_wrapper.proxyURI, '');
     options = {
         headers: {
             authorization: util.format('Bearer %s', api_wrapper.access_token),
             'content-type': 'application/json'
         }
     };
-    console.log(url, options)
     request(url, options, (error, response, body) => { 
+        //console.log(error, response, body);
         if (!error && response.statusCode === 200) { 
-            mainres.status(200).send(body); 
+            if (!parser) {
+                mainres.status(200).send(body); 
+            } else {
+                mainres.status(200).send(parser(body));
+            }
         } else {
+            console.log(proxyURI, api_wrapper.proxyURI, proxyURI || api_wrapper.proxyURI);
+            console.log('Error:', url, body);
             mainres.status(response.statusCode).send(JSON.stringify({
                 'error': 'There was an error'
             })); 
@@ -103,6 +109,6 @@ exports.get_token = (mainreq, mainres, api_wrapper) => {
     _issue_request(mainreq, mainres, api_wrapper, isProxy=false)
 };
 
-exports.forward_request = (mainreq, mainres, api_wrapper) => {
-    _issue_request(mainreq, mainres, api_wrapper, isProxy=true)
+exports.forward_request = (mainreq, mainres, api_wrapper, parser=null, proxyURI=null) => {
+    _issue_request(mainreq, mainres, api_wrapper, isProxy=true, parser=parser, proxyURI=proxyURI)
 };

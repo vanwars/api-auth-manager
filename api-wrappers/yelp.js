@@ -48,7 +48,6 @@ const forward_request = (mainreq, mainres) => {
         if (!error && response.statusCode === 200) {
             mainres.status(200).send(body); 
         } else {
-            console.log('body')
             mainres.status(response.statusCode).send(JSON.stringify({
                 'error': 'There was an error'
             })); 
@@ -56,14 +55,15 @@ const forward_request = (mainreq, mainres) => {
     });
 };
 
+// Order matter! Key First.
 exports.routes = [{
-    'url': exports.proxyURI + '/*',
-    'routing_function': forward_request
-}, {
     'url': keyURI,
     'routing_function': (mainreq, mainres) => {
         mainres.status(200).send(JSON.stringify({
             'token': get_key()
         }));
     }
+}, {
+    'url': exports.proxyURI + '/*',
+    'routing_function': forward_request
 }];
