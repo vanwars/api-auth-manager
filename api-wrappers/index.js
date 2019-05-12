@@ -1,6 +1,24 @@
 const request = require('request');
 const util = require('util');
 
+exports.enforce_interface = (name, api_wrapper) => {
+    const required_keys = [
+        'access_token', 
+        'timeOfTokenCreation', 
+        'message', 
+        'baseURI', 
+        'proxyURI',
+        'get_opts',
+        'routes',
+        'get_documentation'
+    ];
+    for (key of required_keys) {
+        if (typeof api_wrapper[key] === 'undefined') {
+            throw new Error(`${key} must be defined for ${name} module.`);
+        }
+    }
+};
+
 exports.get_opts = (url, key, secret, grant_type) => {
     const payload = key + ":" + secret;
     const encodedPayload = new Buffer(payload).toString("base64");
@@ -69,6 +87,7 @@ const _forward = (mainreq, mainres, api_wrapper) => {
             'content-type': 'application/json'
         }
     };
+    console.log(url, options)
     request(url, options, (error, response, body) => { 
         if (!error && response.statusCode === 200) { 
             mainres.status(200).send(body); 

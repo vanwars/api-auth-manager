@@ -1,32 +1,27 @@
 const request = require('request');
 
-exports.baseURI = 'https://api.flickr.com/services/feeds/photos_public.gne';
-exports.proxyURI = '/flickr-proxy';
-exports.proxyURISimple = exports.proxyURI + '-simple';
-exports.documentationURI = 'https://www.flickr.com/services/feeds/docs/photos_public/'
-
-exports.get_url = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.proxyURI + '/'
+/////////////////////////////////////
+// Private variables and functions //
+/////////////////////////////////////
+const documentationURI = 'https://www.flickr.com/services/feeds/docs/photos_public/'
+const get_url = (mainreq) => {
+    return '//' + mainreq.get('host') + exports.proxyURI + '/';
 };
-exports.get_url_simple = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.proxyURISimple + '/'
+const get_url_simple = (mainreq) => {
+    return '//' + mainreq.get('host') + exports.proxyURISimple + '/';
 };
-exports.get_sample_url = (mainreq) => {
-    return exports.get_url(mainreq) + '?tags=cat'
+const get_sample_url = (mainreq) => {
+    return get_url(mainreq) + '?tags=cat'
 };
-exports.get_sample_url_simple = (mainreq) => {
-    return exports.get_url_simple(mainreq) + '?tags=cat'
+const get_sample_url_simple = (mainreq) => {
+    return get_url_simple(mainreq) + '?tags=cat'
 };
-exports.forward_request = (mainreq, mainres) => {
+const forward_request = (mainreq, mainres) => {
     _issue_request(mainreq, mainres, exports.proxyURI + '/', _parseJSONP);
 };
-
-exports.forward_request_and_simplify = (mainreq, mainres) => {
+const forward_request_and_simplify = (mainreq, mainres) => {
     _issue_request(mainreq, mainres, exports.proxyURISimple + '/', _simplify);
 };
-
 const _issue_request = (mainreq, mainres, proxyURI, parser) => {
     let url = exports.baseURI + mainreq.url.replace(proxyURI, '');
     url += '&format=json'
@@ -40,7 +35,6 @@ const _issue_request = (mainreq, mainres, proxyURI, parser) => {
         }
     });
 };
-
 const _parseJSONP = (body) => {
     // convert from JSONP to JSON:
     body = body.slice(15, body.length - 1);
@@ -59,3 +53,48 @@ const _simplify = (body) => {
     }
     return simplified;
 };
+
+
+////////////////////////////////////
+// Public variables and functions //
+////////////////////////////////////
+exports.baseURI = 'https://api.flickr.com/services/feeds/photos_public.gne';
+exports.proxyURI = '/flickr';
+exports.proxyURISimple = exports.proxyURI + '/simple';
+
+exports.get_documentation = (mainreq, doc_type='standard') => {
+    if (doc_type === 'simple') {
+        return {
+            'name': 'Flickr',
+            'is_simplified': true,
+            'icon': '<i class="fab fa-flickr"></i>',
+            'endpoints': [{
+                'name': 'Photo Search (Simplified)',
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url_simple(mainreq),
+                'example': get_sample_url_simple(mainreq)
+            }]
+        };
+    }
+    return {
+        'name': 'Flickr',
+        'is_simplified': false,
+        'icon': '<i class="fab fa-flickr"></i>',
+        'endpoints': [{
+            'name': 'Photo Search',
+            'documentation': documentationURI,
+            'source': exports.baseURI,
+            'proxy': get_url(mainreq),
+            'example': get_sample_url(mainreq)
+        }]
+    };
+};
+
+exports.routes = [{
+    'url': exports.proxyURISimple + '/*',
+    'routing_function': forward_request_and_simplify
+}, {
+    'url': exports.proxyURI + '/*',
+    'routing_function': forward_request
+}];

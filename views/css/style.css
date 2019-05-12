@@ -70,7 +70,7 @@ nav a:hover {
 section.api-area {
     grid-area: apis;
     margin-top: 20px;
-    padding: 0px 40px 40px 40px;
+    padding: 0px 40px 100px 40px;
 }
 
 table {
@@ -202,16 +202,11 @@ h2 {
     nav {
         display: none;
     }
-    table, th, td {
+    td {
         vertical-align: top;
         word-wrap: break-word;
         word-break: break-all;
     }
-    /* section.api-area {
-        grid-area: apis;
-        margin-top: 20px;
-        padding: 40px;
-    } */
     code.json {
         max-height: none;
         max-width: calc(95vw - 40px);

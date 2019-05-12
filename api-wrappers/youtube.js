@@ -2,33 +2,24 @@ const request = require('request');
 // https://www.googleapis.com/youtube/v3/search?part=snippet&q=skateboarding+dog+&type=video&key=
 
 exports.baseURI = 'https://www.googleapis.com/youtube/v3/search';
-exports.proxyURI = '/youtube-proxy';
-exports.proxyURISimple = exports.proxyURI + '-simple/';
-exports.documentationURI = 'https://developers.google.com/youtube/v3/docs/search/list'
+exports.proxyURI = '/youtube';
+exports.proxyURISimple = exports.proxyURI + '/simple';
 
-exports.get_url = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.proxyURI + '/'
+const documentationURI = 'https://developers.google.com/youtube/v3/docs/search/list';
+const get_url = (mainreq) => {
+    return '//' + mainreq.get('host') + exports.proxyURI + '/';
 };
-exports.get_url_simple = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.proxyURISimple
+const get_url_simple = (mainreq) => {
+    return '//' + mainreq.get('host') + exports.proxyURISimple;
 };
-exports.get_sample_url = (mainreq) => {
-    return exports.get_url(mainreq) + '?q=skateboarding+dog+&type=video'
-};
-exports.get_sample_url_simple = (mainreq) => {
-    return exports.get_url_simple(mainreq) + '?q=skateboarding+dog+&type=video'
-};
-
-get_key = () => {
+const get_key = () => {
     return process.env.YOUTUBE_KEY;
 };
 
 const _issue_request = (mainreq, mainres, proxyURI, parser) => {
     let url = exports.baseURI + mainreq.url.replace(proxyURI, '');
     url += '&part=snippet&key=' + get_key()
-    console.log(url)
+    console.log(proxyURI, url)
     request(url, (error, response, body) => { 
         if (!error && response.statusCode === 200) {
             if (!parser) {
@@ -45,12 +36,43 @@ const _issue_request = (mainreq, mainres, proxyURI, parser) => {
     });
 };
 
-exports.forward_request = (mainreq, mainres) => {
+const forward_request = (mainreq, mainres) => {
+    console.log('forward_requests...');
     _issue_request(mainreq, mainres, exports.proxyURI)
 };
 
-exports.forward_request_and_simplify = (mainreq, mainres) => {
+const forward_request_and_simplify = (mainreq, mainres) => {
+    console.log('forward_request_and_simplify...', exports.proxyURISimple);
     _issue_request(mainreq, mainres, exports.proxyURISimple, _simplify)
+};
+
+exports.get_documentation = (mainreq, doc_type='standard') => {
+    if (doc_type === 'simple') {
+        return {
+            'name': 'YouTube',
+            'is_simplified': true,
+            'icon': '<i class="fab fa-youtube"></i>',
+            'endpoints': [{
+                'name': 'Video Search (Simplified)',
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url_simple(mainreq),
+                'example': get_url_simple(mainreq) + '?q=skateboarding+dog+&type=video'
+            }]
+        };
+    }
+    return {
+        'name': 'YouTube',
+        'is_simplified': false,
+        'icon': '<i class="fab fa-youtube"></i>',
+        'endpoints': [{
+            'name': 'Video Search',
+            'documentation': documentationURI,
+            'source': exports.baseURI,
+            'proxy': get_url(mainreq),
+            'example': get_url(mainreq) + '?q=skateboarding+dog+&type=video'
+        }]
+    };
 };
 
 const _simplify = (body) => {
@@ -65,3 +87,13 @@ const _simplify = (body) => {
     }
     return data;
 };
+
+// note: the simplified proxy has to come *before the 'unsimplified'
+//       in order for regex to work (order matters).
+exports.routes = [{
+        'url': exports.proxyURISimple + '/*',
+        'routing_function': forward_request_and_simplify
+    }, {
+        'url': exports.proxyURI + '/*',
+        'routing_function': forward_request
+    }];

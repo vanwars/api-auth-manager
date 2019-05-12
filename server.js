@@ -30,54 +30,51 @@ app.use(function(req, res, next) {
 app.get('/', (mainreq, mainres) => {
     base = '//' + mainreq.get('host')
     mainres.render('index', { 
-        instructions_full: apis.get_documentation_full(mainreq),
+        instructions_full: apis.get_documentation_full(mainreq, mainres),
         instructions_simplified: apis.get_documentation_simplified(mainreq),
         instructions: apis.get_documentation(mainreq)
     })
-
 });
 
-app.get(yelp.keyURI, (mainreq, mainres) => {
-    mainres.status(200).send(JSON.stringify({
-        'token': yelp.get_key()
-    }));
-});
+// Dynamically generate routes:
+for (route of spotify.routes) {
+    app.get(route.url, route.routing_function);
+}
+for (route of yelp.routes) {
+    app.get(route.url, route.routing_function);
+}
+for (route of youtube.routes) {
+    app.get(route.url, route.routing_function);
+}
+for (route of flickr.routes) {
+    app.get(route.url, route.routing_function);
+}
 
-app.get(spotify.keyURI, (mainreq, mainres) => {
-    spotify.get_token(mainreq, mainres, spotify);
-});
+
 
 app.get(twitter.keyURI, (mainreq, mainres) => {
     twitter.get_token(mainreq, mainres, twitter);
-});
-
-app.get(yelp.proxyURI + '/*', (mainreq, mainres) => {
-    yelp.forward_request(mainreq, mainres);
-});
-
-app.get(spotify.proxyURI + '/*', (mainreq, mainres) => {
-    spotify.forward_request(mainreq, mainres);
 });
 
 app.get(twitter.proxyURI + '/*', (mainreq, mainres) => {
     twitter.forward_request(mainreq, mainres);
 });
 
-app.get(youtube.proxyURISimple + '*', (mainreq, mainres) => {
-    youtube.forward_request_and_simplify(mainreq, mainres);
-});
+// app.get(youtube.proxyURISimple + '*', (mainreq, mainres) => {
+//     youtube.forward_request_and_simplify(mainreq, mainres);
+// });
 
-app.get(youtube.proxyURI + '/*', (mainreq, mainres) => {
-    youtube.forward_request(mainreq, mainres);
-});
+// app.get(youtube.proxyURI + '/*', (mainreq, mainres) => {
+//     youtube.forward_request(mainreq, mainres);
+// });
 
-app.get(flickr.proxyURISimple + '/*', (mainreq, mainres) => {
-    flickr.forward_request_and_simplify(mainreq, mainres);
-});
+// app.get(flickr.proxyURISimple + '/*', (mainreq, mainres) => {
+//     flickr.forward_request_and_simplify(mainreq, mainres);
+// });
 
-app.get(flickr.proxyURI + '/*', (mainreq, mainres) => {
-    flickr.forward_request(mainreq, mainres);
-});
+// app.get(flickr.proxyURI + '/*', (mainreq, mainres) => {
+//     flickr.forward_request(mainreq, mainres);
+// });
 
 app.listen(PORT, () => {
     console.log(`API Helper App listening on port ${PORT}!`)

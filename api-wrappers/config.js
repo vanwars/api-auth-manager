@@ -12,45 +12,9 @@ exports.get_documentation = (mainreq) => {
 }
 exports.get_documentation_full = (mainreq) => {
     return {
-        
-        'youtube-standard': {
-            'name': 'YouTube',
-            'is_simplified': false,
-            'icon': '<i class="fab fa-youtube"></i>',
-            'endpoints': [{
-                'name': 'Video Search',
-                'documentation': youtube.documentationURI,
-                'source': youtube.baseURI,
-                'proxy': youtube.get_url(mainreq),
-                'example': youtube.get_sample_url(mainreq)
-            }]
-        },
-        'flickr-standard': {
-            'name': 'Flickr',
-            'is_simplified': false,
-            'icon': '<i class="fab fa-flickr"></i>',
-            'endpoints': [{
-                'name': 'Photo Search',
-                'documentation': flickr.documentationURI,
-                'source': flickr.baseURI,
-                'proxy': flickr.get_url(mainreq),
-                'example': flickr.get_sample_url(mainreq)
-            }]
-        },
-        'yelp': {
-            'name': 'Yelp',
-            'is_simplified': false,
-            'icon': '<i class="fab fa-yelp"></i>',
-            'endpoints': [
-                {
-                    'name': 'Business Search',
-                    'documentation': yelp.documentationURI,
-                    'source': yelp.baseURI,
-                    'proxy': yelp.get_url(mainreq),
-                    'example': yelp.get_sample_url(mainreq)
-                }
-            ]
-        },
+        'youtube-standard': youtube.get_documentation(mainreq, doc_type='standard'),
+        'flickr-standard': flickr.get_documentation(mainreq, doc_type='standard'),
+        'yelp': yelp.get_documentation(mainreq),
         'spotify': spotify.get_documentation(mainreq),
         'twitter': {
             'name': 'Twitter',
@@ -67,30 +31,8 @@ exports.get_documentation_full = (mainreq) => {
 };
 exports.get_documentation_simplified = (mainreq) => {
     return {
-        'youtube-simplified': {
-            'name': 'YouTube',
-            'is_simplified': true,
-            'icon': '<i class="fab fa-youtube"></i>',
-            'endpoints': [{
-                'name': 'Video Search (Simplified)',
-                'documentation': youtube.documentationURI,
-                'source': youtube.baseURI,
-                'proxy': youtube.get_url_simple(mainreq),
-                'example': youtube.get_sample_url_simple(mainreq)
-            }]
-        },
-        'flickr-simplified': {
-            'name': 'Flickr',
-            'is_simplified': true,
-            'icon': '<i class="fab fa-flickr"></i>',
-            'endpoints': [{
-                'name': 'Photo Search (Simplified)',
-                'documentation': flickr.documentationURI,
-                'source': flickr.baseURI,
-                'proxy': flickr.get_url_simple(mainreq),
-                'example': flickr.get_sample_url_simple(mainreq)
-            }]
-        },
+        'youtube-simplified': youtube.get_documentation(mainreq, doc_type='simple'),
+        'flickr-simplified': flickr.get_documentation(mainreq, doc_type='simple'),
         'eecs130': {
             'name': 'EECS 130',
             'is_simplified': true,

@@ -2,27 +2,41 @@ const request = require('request');
 const util = require('util');
 
 exports.baseURI = 'https://api.yelp.com';
-exports.proxyURI = '/yelp-proxy';
-exports.keyURI = '/yelp';
-exports.documentationURI = 'https://www.yelp.com/developers/documentation/v3/business_search'
+exports.proxyURI = '/yelp';
+const keyURI = '/yelp/key';
 
-exports.get_key_url = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.keyURI
-};
-exports.get_url = (mainreq) => {
-    base = '//' + mainreq.get('host')
-    return base + exports.proxyURI + '/'
-};
-exports.get_sample_url = (mainreq) => {
-    return exports.get_url(mainreq) + 'v3/businesses/search?location=Evanston, IL'
+exports.get_documentation = (mainreq, doc_type='standard') => {
+    if (doc_type === 'standard') {
+        return {
+            'name': 'Yelp',
+            'is_simplified': false,
+            'icon': '<i class="fab fa-yelp"></i>',
+            'endpoints': [
+                {
+                    'name': 'Business Search',
+                    'documentation': 'https://www.yelp.com/developers/documentation/v3/business_search',
+                    'source': exports.baseURI,
+                    'proxy': get_url(mainreq),
+                    'example': get_url(mainreq) + 'v3/businesses/search?location=Evanston, IL'
+                }
+            ]
+        }
+    }
 };
 
-exports.get_key = () => {
+// const get_key_url = (mainreq) => {
+//     return '//' + mainreq.get('host') + keyURI
+// };
+
+const get_url = (mainreq) => {
+    return  '//' + mainreq.get('host') + exports.proxyURI + '/'
+};
+
+const get_key = () => {
     return process.env.YELP_KEY;
 };
 
-exports.forward_request = (mainreq, mainres) => {
+const forward_request = (mainreq, mainres) => {
     const url = exports.baseURI + mainreq.url.replace(exports.proxyURI, '');
     options = {
         headers: {
@@ -41,3 +55,15 @@ exports.forward_request = (mainreq, mainres) => {
         }
     });
 };
+
+exports.routes = [{
+    'url': exports.proxyURI + '/*',
+    'routing_function': forward_request
+}, {
+    'url': keyURI,
+    'routing_function': (mainreq, mainres) => {
+        mainres.status(200).send(JSON.stringify({
+            'token': get_key()
+        }));
+    }
+}];
