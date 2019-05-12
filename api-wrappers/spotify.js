@@ -28,9 +28,7 @@ const forward_request = (mainreq, mainres) => {
 };
 
 const forward_request_and_simplify = (mainreq, mainres) => {
-    console.log('forward_request_and_simplify...', exports.proxyURISimple);
     api_wrapper.forward_request(mainreq, mainres, exports, _simplify, exports.proxyURISimple);
-    //_issue_request(mainreq, mainres, exports.proxyURISimple, _simplify)
 };
 
 const _simplify = (body) => {

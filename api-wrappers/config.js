@@ -36,7 +36,8 @@ exports.get_documentation_simplified = (mainreq) => {
     return {
         'youtube-simplified': youtube.get_documentation(mainreq, doc_type='simple'),
         'flickr-simplified': flickr.get_documentation(mainreq, doc_type='simple'),
-        'spotify-simplified': spotify.get_documentation(mainreq, doc_type='simple')
+        'spotify-simplified': spotify.get_documentation(mainreq, doc_type='simple'),
+        'twitter-simplified': twitter.get_documentation(mainreq, doc_type='simple')
         // 'eecs130': {
         //     'name': 'EECS 130',
         //     'is_simplified': true,
