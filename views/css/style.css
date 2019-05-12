@@ -10,6 +10,10 @@ body * {
 h1, h2, h3, h4 {
     font-family: 'Roboto', sans-serif;
 }
+h1 img {
+    vertical-align: middle;
+    width: 40px;
+}
 header {
     position: fixed;
     z-index: 2;
