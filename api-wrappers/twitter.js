@@ -68,6 +68,7 @@ exports.get_documentation = (mainreq, doc_type='standard') => {
     if (doc_type === 'simple') {
         return {
             'name': 'Twitter',
+            'is_simplified': true,
             'icon': '<i class="fab fa-twitter"></i>',
             'endpoints': [{
                 'name': 'Tweet Search (Simple)',
@@ -80,6 +81,7 @@ exports.get_documentation = (mainreq, doc_type='standard') => {
     }
     return {
         'name': 'Twitter',
+        'is_simplified': false,
         'icon': '<i class="fab fa-twitter"></i>',
         'endpoints': [{
             'name': 'Tweet Search',
