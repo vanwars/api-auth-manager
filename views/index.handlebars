@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Helper</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700|Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/color-brewer.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 
@@ -16,58 +15,84 @@
         <h1>API Tutor</h1>
     </header>
     <main>
-    {{#each instructions}}
-        <h2>{{{this.icon}}} {{this.name}}</h2>
-        <table>
-            {{#if this.documentation}}
-                <tr>
-                    <th>Documentation</th> 
-                    <td>
-                        <a href="{{this.documentation}}" target="_blank">{{this.documentation}}</a>
-                    </td>
-                </tr>
-            {{/if}}
-            {{#if this.source}}
-                <tr>
-                    <th>Endpoint</th> 
-                    <td>
-                        {{this.source}}
-                    </td>
-                </tr>
-            {{/if}}
-            {{#if this.proxy}}
-                <tr>
-                    <th>Proxy</th> 
-                    <td>
-                        {{this.proxy}}
-                    </td>
-                </tr>
-            {{/if}}
-            {{#if this.example}}
-                <tr>
-                    <th>Proxy Example</th> 
-                    <td>
-                        <a href="{{this.example}}">{{this.example}}</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <pre><code class="html">&lt;!-- How to query endpoint w/JavaScript fetch API --&gt;
-&lt;script type="text/javascript"&gt;
-    fetch('{{this.example}}')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        });
-&lt;/script&gt;
+        <nav>
+            <h3>Simplified Endpoints</h3>
+            {{#each instructions_simplified}}
+                <a href="#{{@key}}">{{this.name}}</a>
+            {{/each}}
+
+            <h3>Full Endpoints</h3>
+            {{#each instructions_full}}
+                <a href="#{{@key}}">{{this.name}}</a>
+            {{/each}}
+
+        </nav>
+        <section class="api-area">
+            {{#each instructions}}
+            <h2 id="{{@key}}">
+                {{{this.icon}}} {{this.name}} 
+                {{#if this.is_simplified}} (Simplified){{/if}}
+            </h2>
+            {{#each this.endpoints}}
+            <table>
+                {{#if this.documentation}}
+                    <tr>
+                        <th>Endpoint Name</th> 
+                        <td>
+                            {{this.name}}
+                        </td>
+                    </tr>
+                {{/if}}
+                {{#if this.documentation}}
+                    <tr>
+                        <th>Documentation</th> 
+                        <td>
+                            <a href="{{this.documentation}}" target="_blank">{{this.documentation}}</a>
+                        </td>
+                    </tr>
+                {{/if}}
+                {{#if this.source}}
+                    <tr>
+                        <th>Endpoint</th> 
+                        <td>
+                            {{this.source}}
+                        </td>
+                    </tr>
+                {{/if}}
+                {{#if this.proxy}}
+                    <tr>
+                        <th>Proxy</th> 
+                        <td>
+                            {{this.proxy}}
+                        </td>
+                    </tr>
+                {{/if}}
+                {{#if this.example}}
+                    <tr>
+                        <th>Proxy Example</th> 
+                        <td>
+                            <a href="{{this.example}}">{{this.example}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <pre><code class="js">//How to query endpoint w/JavaScript fetch API
+fetch('{{this.example}}')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
 </code></pre>
-                        <button data-url="{{this.example}}" class="show-data">preview</button>
-                         <pre><code class="json"></code></pre>
-                    </td>
-                </tr>
-            {{/if}}
-        </table>
-    {{/each}}
+                            <button data-url="{{this.example}}" class="show-data">preview</button>
+                            <pre><code class="json"></code></pre>
+                        </td>
+                    </tr>
+                {{/if}}
+            </table>
+            {{/each}}
+        {{/each}}
+        </section>
+ 
     </main>
     <script lang="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
     <script lang="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/javascript.min.js"></script>

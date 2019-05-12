@@ -10,6 +10,29 @@ exports.documentationURI = 'https://developer.spotify.com/documentation/web-api/
 
 exports.get_token = api_wrapper.get_token;
 
+exports.get_documentation = (mainreq) => {
+    return {
+        'name': 'Spotify',
+        'icon': '<i class="fab fa-spotify"></i>',
+        'endpoints': [{
+                'name': 'Tracks',
+                'is_simplified': false,
+                'documentation': exports.documentationURI,
+                'source': exports.baseURI,
+                'proxy': exports.get_url(mainreq),
+                'example': exports.get_sample_url(mainreq)
+            }, {
+                'name': 'Artists',
+                'is_simplified': false,
+                'documentation': exports.documentationURI,
+                'source': exports.baseURI,
+                'proxy': exports.get_url(mainreq),
+                'example': exports.get_sample_url(mainreq)
+            }
+        ]
+    };
+}
+
 exports.get_key_url = (mainreq) => {
     base = '//' + mainreq.get('host')
     return base + exports.keyURI
