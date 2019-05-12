@@ -25,8 +25,8 @@ exports.get_documentation = (mainreq) => {
 }
 exports.get_documentation_full = (mainreq) => {
     return {
-        'youtube-standard': youtube.get_documentation(mainreq, doc_type='standard'),
-        'flickr-standard': flickr.get_documentation(mainreq, doc_type='standard'),
+        'youtube': youtube.get_documentation(mainreq, doc_type='standard'),
+        'flickr': flickr.get_documentation(mainreq, doc_type='standard'),
         'yelp': yelp.get_documentation(mainreq, doc_type='standard'),
         'spotify': spotify.get_documentation(mainreq, doc_type='standard'),
         'twitter': twitter.get_documentation(mainreq, doc_type='standard')
@@ -36,6 +36,7 @@ exports.get_documentation_simplified = (mainreq) => {
     return {
         'youtube-simplified': youtube.get_documentation(mainreq, doc_type='simple'),
         'flickr-simplified': flickr.get_documentation(mainreq, doc_type='simple'),
+        'yelp-simplified': yelp.get_documentation(mainreq, doc_type='simple'),
         'spotify-simplified': spotify.get_documentation(mainreq, doc_type='simple'),
         'twitter-simplified': twitter.get_documentation(mainreq, doc_type='simple')
         // 'eecs130': {
