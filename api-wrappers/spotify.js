@@ -38,13 +38,28 @@ const _simplify = (body) => {
         const track = {
             id: item.id,
             name: item.name,
-            artist_name: item.artists[0].name,
             preview_url: item.preview_url
         }
         try {
             track.album = {
+                id: item.album.id,
                 name: item.album.name,
                 image_url: item.album.images[0].url
+            };
+        } catch (ex) {}
+        try {
+            // artists = []
+            // for (artist of item.artists) {
+            //     artists.push({
+            //         id: artist.id,
+            //         name: artist.name,
+            //     });
+            // }
+            // track.artists = artists;
+            const artist = item.artists[0];
+            track.artist = {
+                id: artist.id,
+                name: artist.name,
             };
         } catch (ex) {}
         data.push(track);
