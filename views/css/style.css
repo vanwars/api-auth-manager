@@ -214,6 +214,10 @@ h2 {
         grid-template-columns: 100vw;
         grid-template-areas: "apis"
     }
+    section.api-area {
+        margin-top: 20px;
+        padding: 0px 10px 100px 10px;
+    }
     nav {
         display: none;
     }
