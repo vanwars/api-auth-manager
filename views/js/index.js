@@ -14,7 +14,7 @@ const retrieveJSON = (ev) => {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            container.querySelector('code').innerHTML = escapeTags(JSON.stringify(data, null, 2));
+            container.querySelector('code').innerHTML = anchorme(JSON.stringify(data, null, 4));
             hljs.highlightBlock(container);
             container.classList.add('active');
             ev.target.innerHTML = '<i class="fas fa-chevron-down"></i> hide data';
