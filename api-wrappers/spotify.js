@@ -35,12 +35,19 @@ const _simplify = (body) => {
     body = JSON.parse(body)
     const data = [];
     for (item of body.tracks.items) {
-        data.push({
+        const track = {
             id: item.id,
             name: item.name,
             artist_name: item.artists[0].name,
             preview_url: item.preview_url
-        });
+        }
+        try {
+            track.album = {
+                name: item.album.name,
+                image_url: item.album.images[0].url
+            };
+        } catch (ex) {}
+        data.push(track);
     }
     return data;
 };
