@@ -4,14 +4,20 @@ const escapeTags = (str) => {
 
 const retrieveJSON = (ev) => {
     const btn = ev.target;
-    const container = btn.parentElement.querySelector('.json');
+    const container = btn.parentElement.parentElement.parentElement.querySelector('.json');
+    if (container.classList.contains('active')) {
+        container.classList.remove('active');
+        ev.target.innerHTML = '<i class="fas fa-chevron-right"></i> load data';
+        return;
+    }
     const url = btn.getAttribute('data-url');
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            container.innerHTML = escapeTags(JSON.stringify(data, null, 2));
+            container.querySelector('code').innerHTML = escapeTags(JSON.stringify(data, null, 2));
             hljs.highlightBlock(container);
             container.classList.add('active');
+            ev.target.innerHTML = '<i class="fas fa-chevron-down"></i> hide data';
         });
 };
 

@@ -19,7 +19,7 @@ const get_key = () => {
 const _issue_request = (mainreq, mainres, proxyURI, parser) => {
     let url = exports.baseURI + mainreq.url.replace(proxyURI, '');
     url += '&part=snippet&key=' + get_key()
-    console.log(proxyURI, url)
+    //console.log(proxyURI, url)
     request(url, (error, response, body) => { 
         if (!error && response.statusCode === 200) {
             if (!parser) {
@@ -28,7 +28,7 @@ const _issue_request = (mainreq, mainres, proxyURI, parser) => {
                 mainres.status(200).send(parser(body));
             }
         } else {
-            console.log('body')
+            //console.log('body')
             mainres.status(response.statusCode).send(JSON.stringify({
                 'error': 'There was an error'
             })); 
@@ -37,12 +37,10 @@ const _issue_request = (mainreq, mainres, proxyURI, parser) => {
 };
 
 const forward_request = (mainreq, mainres) => {
-    console.log('forward_requests...');
     _issue_request(mainreq, mainres, exports.proxyURI)
 };
 
 const forward_request_and_simplify = (mainreq, mainres) => {
-    console.log('forward_request_and_simplify...', exports.proxyURISimple);
     _issue_request(mainreq, mainres, exports.proxyURISimple, _simplify)
 };
 

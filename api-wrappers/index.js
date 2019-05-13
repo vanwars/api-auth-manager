@@ -96,7 +96,7 @@ const _forward = (mainreq, mainres, api_wrapper, parser=null, proxyURI=null) => 
                 mainres.status(200).send(parser(body));
             }
         } else {
-            console.log(proxyURI, api_wrapper.proxyURI, proxyURI || api_wrapper.proxyURI);
+            //console.log(proxyURI, api_wrapper.proxyURI, proxyURI || api_wrapper.proxyURI);
             console.log('Error:', url, body);
             mainres.status(response.statusCode).send(JSON.stringify({
                 'error': 'There was an error'

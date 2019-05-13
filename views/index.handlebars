@@ -87,8 +87,15 @@ fetch('{{this.example}}')
         console.log(data);
     });
 </code></pre>
-                            <button data-url="{{this.example}}" class="show-data">preview</button>
-                            <pre><code class="json"></code></pre>
+                            <button data-url="{{this.example}}" class="show-data">
+                                <i class="fas fa-chevron-right"></i>
+                                load data
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="json">
+                        <td colspan="2" style="padding: 0px;">
+                            <pre><code></code></pre>
                         </td>
                     </tr>
                 {{/if}}
