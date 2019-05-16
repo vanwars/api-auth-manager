@@ -34,6 +34,12 @@ const forward_request_and_simplify = (mainreq, mainres) => {
 const _simplify = (body) => {
     body = JSON.parse(body)
     const data = [];
+    try {
+        body.tracks.items[0];
+    } catch (e) {
+        console.log('body.tracks.items not found (spotify.js');
+        return data;
+    }
     for (item of body.tracks.items) {
         const track = {
             id: item.id,
