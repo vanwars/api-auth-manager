@@ -1,4 +1,6 @@
 const request = require('request');
+const mailer = require('../mailer');
+
 // https://www.googleapis.com/youtube/v3/search?part=snippet&q=skateboarding+dog+&type=video&key=
 
 exports.baseURI = 'https://www.googleapis.com/youtube/v3/search';
@@ -28,10 +30,11 @@ const _issue_request = (mainreq, mainres, proxyURI, parser) => {
                 mainres.status(200).send(parser(body));
             }
         } else {
-            //console.log('body')
-            mainres.status(response.statusCode).send(JSON.stringify({
-                'error': 'There was an error'
-            })); 
+            console.error(body);
+            mailer.send_email('YOUTUBE API ERROR:', body);
+            mainres
+                .status(response.statusCode)
+                .send(body); 
         }
     });
 };
@@ -80,7 +83,8 @@ const _simplify = (body) => {
         data.push({
             videoId: item.id.videoId,
             title: item.snippet.title,
-            url: 'https://www.youtube.com/watch?v=' + item.id.videoId
+            url: 'https://www.youtube.com/watch?v=' + item.id.videoId,
+            embed_url: 'https://www.youtube.com/embed/' + item.id.videoId
         });
     }
     return data;

@@ -1,5 +1,6 @@
 const request = require('request');
 const util = require('util');
+const mailer = require('../mailer');
 
 exports.enforce_interface = (name, api_wrapper) => {
     const required_keys = [
@@ -97,10 +98,9 @@ const _forward = (mainreq, mainres, api_wrapper, parser=null, proxyURI=null) => 
             }
         } else {
             //console.log(proxyURI, api_wrapper.proxyURI, proxyURI || api_wrapper.proxyURI);
-            console.log('Error:', url, body);
-            mainres.status(response.statusCode).send(JSON.stringify({
-                'error': 'There was an error'
-            })); 
+            console.error('Error:', url, body);
+            mailer.send_email('API Tutor Error: ' + url, body);
+            mainres.status(response.statusCode).send(body); 
         }
     });
 };
