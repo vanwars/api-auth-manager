@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-var handlebars  = require('express-handlebars');
+const handlebars  = require('express-handlebars');
 
 
 const apis = require('./api-wrappers/config');

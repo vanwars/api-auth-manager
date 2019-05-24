@@ -5,6 +5,7 @@ const mailer = require('../mailer');
 
 exports.baseURI = 'https://www.googleapis.com/youtube/v3/search';
 exports.proxyURI = '/youtube';
+const keyURI = '/youtube/key';
 exports.proxyURISimple = exports.proxyURI + '/simple';
 
 const documentationURI = 'https://developers.google.com/youtube/v3/docs/search/list';
@@ -16,6 +17,9 @@ const get_url_simple = (mainreq) => {
 };
 const get_key = () => {
     return process.env.YOUTUBE_KEY;
+};
+const get_token = (mainreq, mainres) => {
+    mainres.status(200).send({ 'token': get_key() }); 
 };
 
 const _issue_request = (mainreq, mainres, proxyURI, parser) => {
@@ -93,6 +97,9 @@ const _simplify = (body) => {
 // note: the simplified proxy has to come *before the 'unsimplified'
 //       in order for regex to work (order matters).
 exports.routes = [{
+        'url': keyURI,
+        'routing_function': get_token
+    },{
         'url': exports.proxyURISimple + '/*',
         'routing_function': forward_request_and_simplify
     }, {
