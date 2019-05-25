@@ -72,9 +72,8 @@ const forward_request = (mainreq, mainres, callback, parser=null, proxyURI=null)
                 mainres.status(200).send(parser(body)); 
             }
         } else {
-            mainres.status(response.statusCode).send(JSON.stringify({
-                'error': 'There was an error'
-            })); 
+            console.log(body)
+            mainres.status(response.statusCode).send(body); 
         }
     });
 };

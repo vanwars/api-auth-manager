@@ -84,12 +84,18 @@ const _simplify = (body) => {
     body = JSON.parse(body)
     const data = [];
     for (item of body.items) {
-        data.push({
+        const vid = {
             videoId: item.id.videoId,
             title: item.snippet.title,
             url: 'https://www.youtube.com/watch?v=' + item.id.videoId,
             embed_url: 'https://www.youtube.com/embed/' + item.id.videoId
-        });
+        };
+        try {
+            vid.thumb_url = item.snippet.thumbnails.high.url;
+        } catch (ex) {
+            console.log('no video found');
+        }
+        data.push(vid);
     }
     return data;
 };
