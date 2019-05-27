@@ -3,6 +3,7 @@ const spotify = require('./spotify');
 const twitter = require('./twitter');
 const flickr = require('./flickr');
 const youtube = require('./youtube');
+const sendgrid = require('./sendgrid');
 
 // build routes from modules
 exports.get_routes = () => {
@@ -12,7 +13,8 @@ exports.get_routes = () => {
         ...yelp.routes, 
         ...youtube.routes, 
         ...flickr.routes, 
-        ...twitter.routes
+        ...twitter.routes,
+        ...sendgrid.routes
     );
     return routes;
 };

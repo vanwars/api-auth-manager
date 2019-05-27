@@ -4,6 +4,7 @@ const handlebars  = require('express-handlebars');
 
 
 const apis = require('./api-wrappers/config');
+const utilities = require('./api-wrappers/utilities');
 const PORT = process.env.PORT || 3005
 
 const app = express()
@@ -17,11 +18,23 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json())
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+
+// Todo: in next version of API Tutor, issue revokable API token to students:
+const requireValidToken = (mainreq, mainres, next) => {
+    is_authorized = utilities.checkIfAuthorized(mainreq)
+    if (!is_authorized) {
+        mainres.status(400).send({ 'error': 'A valid auth_manager_token is required.' }); 
+        return;
+    } else {
+        next()
+    }
+};
 
 app.get('/', (mainreq, mainres) => {
     base = '//' + mainreq.get('host')
@@ -35,6 +48,7 @@ app.get('/', (mainreq, mainres) => {
 // Dynamically generate routes:
 // console.log(apis.get_routes());
 for (route of apis.get_routes()) {
+    //app.get(route.url, requireValidToken, route.routing_function);
     app.get(route.url, route.routing_function);
 }
 

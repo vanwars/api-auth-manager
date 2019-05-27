@@ -1,5 +1,6 @@
 const request = require('request');
 const util = require('util');
+const utilities = require('./utilities');
 
 exports.baseURI = 'https://api.yelp.com';
 exports.proxyURI = '/yelp';
@@ -98,15 +99,20 @@ const _simplify = (body) => {
     }
     return data;
 };
+const get_token = (mainreq, mainres) => {
+    const isAuthorized = utilities.checkIfAuthorized(mainreq);
+    if (!isAuthorized) {
+        mainres.status(400).send({ 'error': 'A valid auth_manager_token is required.' }); 
+    } else {
+        mainres.status(200).send({ 'token': get_key() }); 
+    }
+};
+
 
 // Order matter! Key First.
 exports.routes = [{
     'url': keyURI,
-    'routing_function': (mainreq, mainres) => {
-        mainres.status(200).send(JSON.stringify({
-            'token': get_key()
-        }));
-    }
+    'routing_function': get_token
 }, {
     'url': exports.proxyURISimple + '/*',
     'routing_function': forward_request_and_simplify

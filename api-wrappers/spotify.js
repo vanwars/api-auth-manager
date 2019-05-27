@@ -1,4 +1,5 @@
 const api_wrapper = require('./index');
+const utilities = require('./utilities');
 
 exports.access_token = null;
 exports.timeOfTokenCreation = null;
@@ -10,9 +11,7 @@ exports.proxyURISimple = '/spotify/simple'
 const keyURI = '/spotify/key';
 const documentationURI = 'https://developer.spotify.com/documentation/web-api/reference/search/search/';
 const icon = '<i class="fab fa-spotify"></i>';
-const get_key_url = (mainreq) => {
-    return '//' + mainreq.get('host') + keyURI
-};
+
 const get_url = (mainreq) => {
     return '//' + mainreq.get('host') + exports.proxyURI + '/'
 };
@@ -21,6 +20,15 @@ const get_url_simple = (mainreq) => {
 };
 
 const get_token = (mainreq, mainres) => {
+    const isAuthorized = utilities.checkIfAuthorized(mainreq);
+    if (!isAuthorized) {
+        mainres.status(400).send({ 'error': 'A valid auth_token is required.' }); 
+    } else {
+        api_wrapper.get_token(mainreq, mainres, exports);
+    }
+};
+
+const get_token_no_auth = (mainreq, mainres) => {
     api_wrapper.get_token(mainreq, mainres, exports);
 };
 
