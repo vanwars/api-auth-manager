@@ -42,14 +42,30 @@ const forward_request_and_simplify = (mainreq, mainres) => {
 
 const _simplify = (body) => {
     body = JSON.parse(body)
-    const data = [];
+    
+    // 1. are they tracks?
     try {
-        body.tracks.items[0];
-    } catch (e) {
-        console.log('body.tracks.items not found (spotify.js');
-        return data;
-    }
-    for (item of body.tracks.items) {
+        return _tracks_simplifier(body.tracks.items);
+    } catch (e) {}
+
+    // 2. are they artists?
+    try {
+        return _artists_simplifier(body.artists.items);
+    } catch (e) { }
+
+    // 3. are they albums?
+    try {
+        return _albums_simplifier(body.albums.items);
+    } catch (e) { }
+    
+    return {
+        'message': 'No tracks, artists, or albums found that match this request'
+    };
+};
+
+const _tracks_simplifier = (items) => {
+    const data = [];
+    for (item of items) {
         const track = {
             id: item.id,
             name: item.name,
@@ -63,14 +79,6 @@ const _simplify = (body) => {
             };
         } catch (ex) {}
         try {
-            // artists = []
-            // for (artist of item.artists) {
-            //     artists.push({
-            //         id: artist.id,
-            //         name: artist.name,
-            //     });
-            // }
-            // track.artists = artists;
             const artist = item.artists[0];
             track.artist = {
                 id: artist.id,
@@ -78,6 +86,43 @@ const _simplify = (body) => {
             };
         } catch (ex) {}
         data.push(track);
+    }
+    return data;
+};
+
+const _artists_simplifier = (items) => {
+    const data = [];
+    for (item of items) {
+        const artist = {
+            'id': item.id,
+            'name': item.name,
+            'popularity': item.popularity
+        }
+        try {
+            artist.image_url = item.images[0].url
+        } catch (ex) {}
+        try {
+            artist.spotify_url = item.external_urls.spotify
+        } catch (ex) {}
+        data.push(artist)
+    }
+    return data;
+};
+
+const _albums_simplifier = (items) => {
+    const data = [];
+    for (item of items) {
+        const album = {
+            'id': item.id,
+            'name': item.name,
+        }
+        try {
+            album.image_url = item.images[0].url
+        } catch (ex) {}
+        try {
+            album.spotify_url = item.external_urls.spotify
+        } catch (ex) {}
+        data.push(album)
     }
     return data;
 };
