@@ -41,7 +41,15 @@ const forward_request_and_simplify = (mainreq, mainres) => {
 };
 
 const _simplify = (body) => {
-    body = JSON.parse(body)
+    try {
+        body = JSON.parse(body)
+    } catch(e) {
+        return {
+            'error': true,
+            'message': 'Error parsing JSON response.',
+            'body': body
+        }
+    }
     
     // 1. are they tracks?
     try {
