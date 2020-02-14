@@ -148,6 +148,18 @@ exports.get_documentation = (mainreq, doc_type='standard') => {
                 'source': exports.baseURI,
                 'proxy': get_url_simple(mainreq),
                 'example': get_url_simple(mainreq) + 'v1/search?q=beyonce&type=track'
+            }, {
+                'name': 'Spotify Artists (Simplified)',
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url_simple(mainreq),
+                'example': get_url_simple(mainreq) + 'v1/search?q=beyonce&type=artist'
+            }, {
+                'name': 'Spotify Albums (Simplified)',
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url_simple(mainreq),
+                'example': get_url_simple(mainreq) + 'v1/search?q=beyonce&type=album'
             }]
         };
     }
@@ -168,6 +180,13 @@ exports.get_documentation = (mainreq, doc_type='standard') => {
                 'source': exports.baseURI,
                 'proxy': get_url(mainreq),
                 'example': get_url(mainreq) + 'v1/search?q=beyonce&type=artist'
+            }, {
+                'name': 'Spotify Albums',
+                'is_simplified': false,
+                'documentation': documentationURI,
+                'source': exports.baseURI,
+                'proxy': get_url(mainreq),
+                'example': get_url(mainreq) + 'v1/search?q=beyonce&type=album'
             }
         ]
     };
