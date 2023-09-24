@@ -54,7 +54,7 @@ const _issue_request = async (
         To be safe, we won't send a token to the client
         if the token is more than 45 minutes old
     */
-    console.log("IS PROXY:", isProxy);
+    // console.log("IS PROXY:", isProxy);
     if (api_wrapper.access_token && tokenAgeInMinutes < 45) {
         api_wrapper.message.token_age_minutes = tokenAgeInMinutes;
         if (!isProxy) {
