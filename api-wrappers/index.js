@@ -1,6 +1,4 @@
-const request = require("request");
 const util = require("util");
-const mailer = require("../mailer");
 
 exports.enforce_interface = (name, api_wrapper) => {
     const required_keys = [
@@ -35,7 +33,7 @@ exports.get_opts = (url, key, secret, grant_type) => {
     };
 };
 
-const _issue_request = (
+const _issue_request = async (
     mainreq,
     mainres,
     api_wrapper,
@@ -56,6 +54,7 @@ const _issue_request = (
         To be safe, we won't send a token to the client
         if the token is more than 45 minutes old
     */
+    console.log("IS PROXY:", isProxy);
     if (api_wrapper.access_token && tokenAgeInMinutes < 45) {
         api_wrapper.message.token_age_minutes = tokenAgeInMinutes;
         if (!isProxy) {
@@ -64,30 +63,36 @@ const _issue_request = (
             _forward(mainreq, mainres, api_wrapper, parser, proxyURI);
         }
     } else {
+        // get token:
         api_wrapper.timeOfTokenCreation = Date.now();
-        request(api_wrapper.get_opts(), (err, res, body) => {
-            api_wrapper.access_token = body["access_token"];
-            api_wrapper.message = {
-                token: api_wrapper.access_token,
-                expires_in: body["expires_in"],
-                token_age_minutes: 0,
-            };
-            if (!isProxy) {
-                try {
-                    mainres
-                        .status(200)
-                        .send(JSON.stringify(api_wrapper.message));
-                } catch (error) {
-                    console.log("errored the first time: ", error);
-                }
-            } else {
-                _forward(mainreq, mainres, api_wrapper, parser, proxyURI);
-            }
+        // console.log(api_wrapper.get_opts());
+        const opts = api_wrapper.get_opts();
+        const response = await fetch(opts.url, {
+            method: opts.method,
+            headers: opts.headers,
+            body: opts.body,
         });
+        const data = await response.json();
+        // console.log(data);
+        api_wrapper.access_token = data.access_token;
+        api_wrapper.message = {
+            token: api_wrapper.access_token,
+            expires_in: data.expires_in,
+            token_age_minutes: 0,
+        };
+        if (!isProxy) {
+            try {
+                mainres.status(200).send(JSON.stringify(api_wrapper.message));
+            } catch (error) {
+                console.log("errored the first time: ", error);
+            }
+        } else {
+            _forward(mainreq, mainres, api_wrapper, parser, proxyURI);
+        }
     }
 };
 
-const _forward = (
+const _forward = async (
     mainreq,
     mainres,
     api_wrapper,
@@ -106,21 +111,35 @@ const _forward = (
             "content-type": "application/json",
         },
     };
-    request(url, options, (error, response, body) => {
-        //console.log(error, response, body);
-        if (!error && response.statusCode === 200) {
-            if (!parser) {
-                mainres.status(200).send(body);
-            } else {
-                mainres.status(200).send(parser(body));
-            }
+
+    let response;
+    let data;
+    try {
+        response = await fetch(url, options);
+    } catch (ex) {
+        console.error(response);
+        mainres.status(response ? response.status : 500).send(
+            JSON.stringify({
+                error: `There was an request error: ${url}`,
+            })
+        );
+    }
+    try {
+        data = await response.text();
+        // mainres.status(200).send(parser(data));
+        if (!parser) {
+            mainres.status(200).send(data);
         } else {
-            //console.log(proxyURI, api_wrapper.proxyURI, proxyURI || api_wrapper.proxyURI);
-            console.error("Error:", url, body);
-            mailer.send_email("API Tutor Error: " + url, body);
-            mainres.status(response.statusCode).send(body);
+            mainres.status(200).send(parser(data));
         }
-    });
+    } catch (ex) {
+        console.error(data);
+        mainres.status(response ? response.status : 500).send(
+            JSON.stringify({
+                error: `There was an parse error: ${url}. Check logs.`,
+            })
+        );
+    }
 };
 
 exports.get_token = (mainreq, mainres, api_wrapper) => {

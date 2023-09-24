@@ -16,6 +16,7 @@ exports.get_routes = () => {
         // ...twitter.routes,
         ...sendgrid.routes
     );
+    console.log(routes);
     return routes;
 };
 
