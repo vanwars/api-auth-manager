@@ -21,7 +21,7 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                     proxy: get_url_simple(mainreq),
                     example:
                         get_url_simple(mainreq) +
-                        "v3/businesses/search?location=Evanston, IL",
+                        "v3/businesses/search?location=Asheville, NC",
                 },
             ],
         };
@@ -39,7 +39,7 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                 proxy: get_url(mainreq),
                 example:
                     get_url(mainreq) +
-                    "v3/businesses/search?location=Evanston, IL",
+                    "v3/businesses/search?location=Asheville, NC",
             },
         ],
     };
