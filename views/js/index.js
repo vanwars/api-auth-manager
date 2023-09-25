@@ -16,9 +16,11 @@ const retrieveJSON = async (ev) => {
     }
     // const url = btn.getAttribute("data-url");
     const codeElem = btn.previousElementSibling.querySelector("code");
-    let textJS = codeElem.innerText;
-    let token = textJS.split("fetch('")[1];
-    const url = token.split("'")[0];
+    // let textJS = codeElem.innerText;
+    // let token = textJS.split("fetch('")[1];
+    // const url = token.split("'")[0];
+    url = codeElem.querySelector(".hljs-string").innerText;
+    url = url.substring(1, url.length - 1);
     console.log(url);
     try {
         const response = await fetch(url);
@@ -77,6 +79,17 @@ const initEventHandlers = () => {
     }
     for (elem of document.querySelectorAll("code")) {
         hljs.highlightBlock(elem);
+        // setTimeout(() => {
+        console.log(elem);
+        // const url = '';
+        if (elem.querySelector(".hljs-string")) {
+            console.log("YES!!!!:, ", elem.querySelector(".hljs-string"));
+            elem.querySelector(".hljs-string").setAttribute(
+                "contenteditable",
+                "true"
+            );
+        }
+        // }, 100);
     }
     for (elem of document.querySelectorAll("nav a")) {
         elem.onclick = scrollToAnchor;

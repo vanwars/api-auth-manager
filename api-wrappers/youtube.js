@@ -8,10 +8,18 @@ exports.proxyURISimple = exports.proxyURI + "/simple";
 const documentationURI =
     "https://developers.google.com/youtube/v3/docs/search/list";
 const get_url = (mainreq) => {
-    return "//" + mainreq.get("host") + exports.proxyURI + "/";
+    return (
+        mainreq.protocol + "://" + mainreq.get("host") + exports.proxyURI + "/"
+    );
 };
 const get_url_simple = (mainreq) => {
-    return "//" + mainreq.get("host") + exports.proxyURISimple + "/";
+    return (
+        mainreq.protocol +
+        "://" +
+        mainreq.get("host") +
+        exports.proxyURISimple +
+        "/"
+    );
 };
 const get_key = () => {
     return process.env.YOUTUBE_KEY;
