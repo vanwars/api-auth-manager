@@ -8,11 +8,11 @@ exports.proxyURISimple = exports.proxyURI + "/simple";
 const documentationURI =
     "https://developers.google.com/youtube/v3/docs/search/list";
 const get_url = (mainreq) => {
-    const protocol = mainreq.secure ? "https://" : "http://";
+    const protocol = mainreq.protocol + "://";
     return protocol + mainreq.get("host") + exports.proxyURI + "/";
 };
 const get_url_simple = (mainreq) => {
-    const protocol = mainreq.secure ? "https://" : "http://";
+    const protocol = mainreq.protocol + "://";
     return protocol + mainreq.get("host") + exports.proxyURISimple + "/";
 };
 const get_key = () => {

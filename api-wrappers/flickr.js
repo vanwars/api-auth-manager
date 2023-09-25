@@ -4,11 +4,11 @@
 const documentationURI =
     "https://www.flickr.com/services/feeds/docs/photos_public/";
 const get_url = (mainreq) => {
-    const protocol = mainreq.secure ? "https://" : "http://";
+    const protocol = mainreq.protocol + "://";
     return protocol + mainreq.get("host") + exports.proxyURI + "/";
 };
 const get_url_simple = (mainreq) => {
-    const protocol = mainreq.secure ? "https://" : "http://";
+    const protocol = mainreq.protocol + "://";
     return protocol + mainreq.get("host") + exports.proxyURISimple + "/";
 };
 const get_sample_url = (mainreq) => {
