@@ -14,6 +14,7 @@ const app = express();
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.use("/static", express.static("views"));
+app.enable("trust proxy");
 
 app.use(
     bodyParser.urlencoded({
