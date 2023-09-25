@@ -46,18 +46,12 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
 };
 
 const get_url = (mainreq) => {
-    return (
-        mainreq.protocol + "://" + mainreq.get("host") + exports.proxyURI + "/"
-    );
+    const protocol = mainreq.secure ? "https://" : "http://";
+    return protocol + mainreq.get("host") + exports.proxyURI + "/";
 };
 const get_url_simple = (mainreq) => {
-    return (
-        mainreq.protocol +
-        "://" +
-        mainreq.get("host") +
-        exports.proxyURISimple +
-        "/"
-    );
+    const protocol = mainreq.secure ? "https://" : "http://";
+    return protocol + mainreq.get("host") + exports.proxyURISimple + "/";
 };
 
 const get_key = () => {
