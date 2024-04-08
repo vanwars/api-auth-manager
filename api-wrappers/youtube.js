@@ -1,4 +1,4 @@
-// https://www.googleapis.com/youtube/v3/search?part=snippet&q=skateboarding+dog+&type=video&key=
+// https://www.googleapis.com/youtube/v3/search?part=snippet&q=skateboarding+dog&type=video&key=
 
 exports.baseURI = "https://www.googleapis.com/youtube/v3/search";
 exports.proxyURI = "/youtube";
@@ -76,7 +76,7 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                     proxy: get_url_simple(mainreq),
                     example:
                         get_url_simple(mainreq) +
-                        "?q=skateboarding+dog+&type=video",
+                        "?q=skateboarding+dog&type=video",
                     args: {
                         q: "skateboarding+dog",
                         type: "video",
@@ -95,7 +95,7 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                 documentation: documentationURI,
                 source: exports.baseURI,
                 proxy: get_url(mainreq),
-                example: get_url(mainreq) + "?q=skateboarding+dog+&type=video",
+                example: get_url(mainreq) + "?q=skateboarding+dog&type=video",
                 args: {
                     q: "skateboarding+dog",
                     type: "video",
