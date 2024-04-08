@@ -14,17 +14,14 @@ const retrieveJSON = async (ev) => {
         ev.target.innerHTML = '<i class="fas fa-chevron-right"></i> load data';
         return;
     }
-    // const url = btn.getAttribute("data-url");
     const codeElem = btn.previousElementSibling.querySelector("code");
-    // let textJS = codeElem.innerText;
-    // let token = textJS.split("fetch('")[1];
-    // const url = token.split("'")[0];
     url = codeElem.querySelector(".hljs-string").innerText;
     url = url.substring(1, url.length - 1);
     console.log(url);
     try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log("Data from server:", data);
         container.querySelector("code").innerHTML = anchorme(
             JSON.stringify(data, null, 4)
         );
@@ -40,56 +37,18 @@ const retrieveJSON = async (ev) => {
     }
 };
 
-// const retrieveJSON = async (ev) => {
-//     const btn = ev.target;
-//     const codeElem = btn.previousElementSibling.querySelector("code");
-//     let textJS = codeElem.innerText;
-//     textJS = textJS.replace("console.log(getDataFromServer());", "");
-
-//     btn.parentElement.parentElement.parentElement.querySelector(".json");
-
-//     const container =
-//         btn.parentElement.parentElement.parentElement.querySelector(".json");
-//     if (container.classList.contains("active")) {
-//         container.classList.remove("active");
-//         ev.target.innerHTML = '<i class="fas fa-chevron-right"></i> load data';
-//         return;
-//     }
-//     // const url = btn.getAttribute("data-url");
-//     // fetch(url)
-//     //     .then((response) => response.json())
-//     //     .then((data) => {
-//     const f = AsyncFunction(textJS);
-//     console.log(textJS);
-//     console.log(f);
-//     const data = await f();
-//     console.log(data);
-//     container.querySelector("code").innerHTML = anchorme(
-//         JSON.stringify(data, null, 4)
-//     );
-//     hljs.highlightBlock(container);
-//     container.classList.add("active");
-//     ev.target.innerHTML = '<i class="fas fa-chevron-down"></i> hide data';
-//     // });
-// };
-
 const initEventHandlers = () => {
     for (elem of document.querySelectorAll(".show-data")) {
         elem.onclick = retrieveJSON;
     }
     for (elem of document.querySelectorAll("code")) {
         hljs.highlightBlock(elem);
-        // setTimeout(() => {
-        console.log(elem);
-        // const url = '';
         if (elem.querySelector(".hljs-string")) {
-            console.log("YES!!!!:, ", elem.querySelector(".hljs-string"));
             elem.querySelector(".hljs-string").setAttribute(
                 "contenteditable",
                 "true"
             );
         }
-        // }, 100);
     }
     for (elem of document.querySelectorAll("nav a")) {
         elem.onclick = scrollToAnchor;

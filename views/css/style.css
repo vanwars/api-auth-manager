@@ -4,25 +4,34 @@ body {
     background: #F8F8F8;
     overflow-x: hidden;
 }
+
 body * {
     box-sizing: border-box;
 }
+
 ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 9px;
 }
+
 ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(0,0,0,.5);
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
-h1, h2, h3, h4 {
+
+h1,
+h2,
+h3,
+h4 {
     font-family: 'Roboto', sans-serif;
 }
+
 h1 img {
     vertical-align: middle;
     width: 40px;
 }
+
 header {
     position: fixed;
     z-index: 2;
@@ -30,9 +39,10 @@ header {
     width: 100vw;
     top: 0px;
     background-image: -webkit-linear-gradient(top, #666, #111);
-    box-shadow: 6px 4px 8px 3px rgba(0, 0, 0, 0.25), 
+    box-shadow: 6px 4px 8px 3px rgba(0, 0, 0, 0.25),
         inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
+
 header h1 {
     color: white;
     margin: 0px;
@@ -40,6 +50,7 @@ header h1 {
     margin-left: 20px;
     font-size: 1.3em;
 }
+
 main {
     display: grid;
     grid-template-columns: 18vw 82vw;
@@ -63,26 +74,32 @@ nav {
     z-index: 1;
     padding: 20px;
 }
+
 nav h3 {
     margin-bottom: 5px;
     margin-top: 30px;
     color: #222;
     font-size: 1em;
 }
+
 nav a {
     padding-left: 15px;
 }
-nav a, nav a:visited {
+
+nav a,
+nav a:visited {
     text-decoration: none;
     color: #777;
     font-size: 0.9em;
     line-height: 1.8em;
 }
+
 nav a:hover {
     text-decoration: none;
     color: #444;
     font-weight: 600;
 }
+
 section.api-area {
     grid-area: apis;
     margin-top: 20px;
@@ -91,18 +108,19 @@ section.api-area {
 
 table {
     width: 100%;
-    border-collapse:separate;
-    border:solid #EEE 1px;
+    border-collapse: separate;
+    border: solid #EEE 1px;
     border-radius: 6px;
-    -moz-border-radius:6px;
+    -moz-border-radius: 6px;
     background: white;
     margin-bottom: 40px;
     /* box-shadow: 1px 1px 4px 2px rgba(200, 200, 200, 0.2); */
 }
 
-td, th {
-    border-left:solid #EEE 1px;
-    border-top:solid #EEE 1px;
+td,
+th {
+    border-left: solid #EEE 1px;
+    border-top: solid #EEE 1px;
     padding: 8px;
     font-size: 0.9em;
     vertical-align: top;
@@ -115,12 +133,15 @@ th {
     color: #222;
     border-left: none;
 }
+
 td:first-child {
-    border-left: none; 
+    border-left: none;
 }
+
 .show-data i {
     font-size: 12px;
 }
+
 .show-data {
     /* margin-left: 20px; */
     background: white;
@@ -135,9 +156,11 @@ td:first-child {
     padding: 6px 16px;
     text-align: center;
 }
+
 .show-data:hover {
     background: #eee;
 }
+
 .show-data:focus {
     outline: none;
 }
@@ -159,20 +182,26 @@ code {
 .json.active {
     display: table-row;
 }
+
 .hljs {
     background: white;
 }
-tr:first-child th, tr:first-child td {
-    border-top: none; 
+
+tr:first-child th,
+tr:first-child td {
+    border-top: none;
 }
+
 td {
     color: #555;
 }
 
-a, a:visited {
+a,
+a:visited {
     text-decoration: none;
     color: #53a7e7;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -182,53 +211,73 @@ h2 {
     margin-top: -60px;
     font-size: 1.5em;
 }
-.fab, .fas {
+
+.fab,
+.fas {
     font-size: 1.2em;
 }
+
 .fa-yelp {
     color: #cd2223;
 }
+
 .fa-flickr {
     color: #ff0084;
 }
+
 .fa-youtube {
     color: #ef1b0d;
 }
+
 .fa-twitter {
     color: #53a7e7;
 }
+
 .fa-spotify {
     color: #1ed15d;
 }
+
 .fa-graduation-cap {
-    color:#4e2a84;
+    color: #4e2a84;
+}
+
+.hljs-string[contenteditable="true"] {
+    color: #756bb1;
+    border-bottom: solid 1px #333;
+    background: #F9F9F9;
 }
 
 @media (max-width: 1000px) {
     main {
         grid-template-columns: 30vw 70vw;
     }
+
     nav {
         width: 30vw;
     }
 }
+
 @media (max-width: 800px) {
     main {
         grid-template-columns: 100vw;
         grid-template-areas: "apis"
     }
+
     section.api-area {
         margin-top: 20px;
         padding: 0px 10px 100px 10px;
     }
+
     nav {
         display: none;
     }
+
     td {
         vertical-align: top;
         word-wrap: break-word;
         word-break: break-all;
     }
+
     code.json {
         max-height: none;
         max-width: calc(95vw - 40px);

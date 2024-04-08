@@ -77,6 +77,10 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                     example:
                         get_url_simple(mainreq) +
                         "?q=skateboarding+dog+&type=video",
+                    args: {
+                        q: "skateboarding+dog",
+                        type: "video",
+                    },
                 },
             ],
         };
@@ -92,6 +96,10 @@ exports.get_documentation = (mainreq, doc_type = "standard") => {
                 source: exports.baseURI,
                 proxy: get_url(mainreq),
                 example: get_url(mainreq) + "?q=skateboarding+dog+&type=video",
+                args: {
+                    q: "skateboarding+dog",
+                    type: "video",
+                },
             },
         ],
     };

@@ -81,12 +81,13 @@
                     <tr>
                         <td colspan="2">
                             <pre><code class="js">//How to query endpoint w/JavaScript fetch API
-async function getDataFromServer() {
-    const response = await fetch('{{this.example}}');
+async function getServerDataAndPrintIt() {
+    const url = '{{this.example}}';
+    const response = await fetch(url);
     const data = await response.json();
-    return data;
+    console.log(data);
 }
-console.log(getDataFromServer());
+getServerDataAndPrintIt();
 </code></pre>
                             <button data-url="{{this.example}}" class="show-data">
                                 <i class="fas fa-chevron-right"></i>
