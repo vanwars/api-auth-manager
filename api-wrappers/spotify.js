@@ -8,6 +8,8 @@ exports.message = null;
 exports.baseURI = "https://api.spotify.com";
 exports.proxyURI = "/spotify";
 exports.proxyURISimple = "/spotify/simple";
+exports.proxyURISimpleOne = "/spotify/simple/one";
+exports.proxyURISimpleFirst = "/spotify/simple/first";
 const keyURI = "/spotify/key";
 const documentationURI =
     "https://developer.spotify.com/documentation/web-api/reference/search/search/";
@@ -31,10 +33,6 @@ const get_token = (mainreq, mainres) => {
     }
 };
 
-const get_token_no_auth = (mainreq, mainres) => {
-    api_wrapper.get_token(mainreq, mainres, exports);
-};
-
 const forward_request = (mainreq, mainres) => {
     api_wrapper.forward_request(mainreq, mainres, exports);
 };
@@ -48,10 +46,30 @@ const forward_request_and_simplify = (mainreq, mainres) => {
         exports.proxyURISimple
     );
 };
+const forward_request_and_simplify_one = (mainreq, mainres) => {
+    api_wrapper.forward_request(
+        mainreq,
+        mainres,
+        exports,
+        _simplify_one,
+        exports.proxyURISimpleOne
+    );
+};
+
+const forward_request_and_simplify_first = (mainreq, mainres) => {
+    api_wrapper.forward_request(
+        mainreq,
+        mainres,
+        exports,
+        _simplify_first,
+        exports.proxyURISimpleFirst
+    );
+};
 
 const _simplify = (body) => {
     try {
         body = JSON.parse(body);
+        // console.log(body);
     } catch (e) {
         return {
             error: true,
@@ -80,9 +98,32 @@ const _simplify = (body) => {
     };
 };
 
+const _simplify_one = (body) => {
+    let data = _simplify(body);
+    try {
+        // console.log("trying to simplify..."); //, data);
+        const idx = utilities.randomInt(0, data.length - 1);
+        data = data[idx];
+        // console.log("simplified", data);
+    } catch (e) {
+        console.error(e);
+    }
+    return data;
+};
+
+const _simplify_first = (body) => {
+    let data = _simplify(body);
+    try {
+        data = data[0];
+    } catch (e) {
+        console.error(e);
+    }
+    return data;
+};
+
 const _tracks_simplifier = (items) => {
     const data = [];
-    for (item of items) {
+    for (const item of items) {
         const track = {
             id: item.id,
             name: item.name,
@@ -229,11 +270,19 @@ exports.routes = [
         routing_function: get_token,
     },
     {
-        url: exports.proxyURISimple + "/*",
+        url: exports.proxyURISimpleOne + "*",
+        routing_function: forward_request_and_simplify_one,
+    },
+    {
+        url: exports.proxyURISimpleFirst + "*",
+        routing_function: forward_request_and_simplify_first,
+    },
+    {
+        url: exports.proxyURISimple + "*",
         routing_function: forward_request_and_simplify,
     },
     {
-        url: exports.proxyURI + "/*",
+        url: exports.proxyURI + "*",
         routing_function: forward_request,
     },
 ];

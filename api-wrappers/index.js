@@ -102,9 +102,14 @@ const _forward = async (
     if (!api_wrapper.access_token) {
         throw new Error("access_token has not been set");
     }
-    const url =
+    let url =
         api_wrapper.baseURI +
         mainreq.url.replace(proxyURI || api_wrapper.proxyURI, "");
+    // console.log("api_wrapper.baseURI:", api_wrapper.baseURI);
+    // console.log("api_wrapper.proxyURI:", api_wrapper.proxyURI);
+    // console.log("proxyURI:", proxyURI);
+    // console.log("url:", url);
+
     options = {
         headers: {
             authorization: util.format("Bearer %s", api_wrapper.access_token),

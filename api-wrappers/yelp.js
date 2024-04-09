@@ -4,6 +4,7 @@ const utilities = require("./utilities");
 exports.baseURI = "https://api.yelp.com";
 exports.proxyURI = "/yelp";
 exports.proxyURISimple = "/yelp/simple";
+exports.proxyURISimpleOne = "/yelp/simple/one";
 const keyURI = "/yelp/key";
 
 exports.get_documentation = (mainreq, doc_type = "standard") => {
@@ -110,6 +111,16 @@ const forward_request_and_simplify = (mainreq, mainres) => {
     forward_request(mainreq, mainres, null, _simplify, exports.proxyURISimple);
 };
 
+const forward_request_and_simplify_one = (mainreq, mainres) => {
+    forward_request(
+        mainreq,
+        mainres,
+        null,
+        _simplify_one,
+        exports.proxyURISimpleOne
+    );
+};
+
 const _simplify = (body) => {
     body = JSON.parse(body);
     const data = [];
@@ -127,6 +138,20 @@ const _simplify = (body) => {
     }
     return data;
 };
+
+const _simplify_one = (body) => {
+    let data = _simplify(body);
+    try {
+        // console.log("trying to simplify..."); //, data);
+        const idx = utilities.randomInt(0, data.length - 1);
+        data = data[idx];
+        // console.log("simplified", data);
+    } catch (e) {
+        console.error(e);
+    }
+    return data;
+};
+
 const get_token = (mainreq, mainres) => {
     const isAuthorized = utilities.checkIfAuthorized(mainreq);
     if (!isAuthorized) {
@@ -145,11 +170,15 @@ exports.routes = [
         routing_function: get_token,
     },
     {
-        url: exports.proxyURISimple + "/*",
+        url: exports.proxyURISimpleOne + "*",
+        routing_function: forward_request_and_simplify_one,
+    },
+    {
+        url: exports.proxyURISimple + "*",
         routing_function: forward_request_and_simplify,
     },
     {
-        url: exports.proxyURI + "/*",
+        url: exports.proxyURI + "*",
         routing_function: forward_request,
     },
 ];

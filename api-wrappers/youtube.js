@@ -1,9 +1,11 @@
 // https://www.googleapis.com/youtube/v3/search?part=snippet&q=skateboarding+dog&type=video&key=
+const utilities = require("./utilities");
 
 exports.baseURI = "https://www.googleapis.com/youtube/v3/search";
 exports.proxyURI = "/youtube";
 const keyURI = "/youtube/key";
 exports.proxyURISimple = exports.proxyURI + "/simple";
+exports.proxyURISimpleOne = exports.proxyURISimple + "/one";
 
 const documentationURI =
     "https://developers.google.com/youtube/v3/docs/search/list";
@@ -60,6 +62,10 @@ const forward_request = (mainreq, mainres) => {
 
 const forward_request_and_simplify = (mainreq, mainres) => {
     _issue_request(mainreq, mainres, exports.proxyURISimple, _simplify);
+};
+
+const forward_request_and_simplify_one = (mainreq, mainres) => {
+    _issue_request(mainreq, mainres, exports.proxyURISimpleOne, _simplify_one);
 };
 
 exports.get_documentation = (mainreq, doc_type = "standard") => {
@@ -125,6 +131,19 @@ const _simplify = (body) => {
     return data;
 };
 
+const _simplify_one = (body) => {
+    let data = _simplify(body);
+    try {
+        // console.log("trying to simplify..."); //, data);
+        const idx = utilities.randomInt(0, data.length - 1);
+        data = data[idx];
+        // console.log("simplified", data);
+    } catch (e) {
+        console.error(e);
+    }
+    return data;
+};
+
 // note: the simplified proxy has to come *before the 'unsimplified'
 //       in order for regex to work (order matters).
 exports.routes = [
@@ -133,11 +152,15 @@ exports.routes = [
         routing_function: get_token,
     },
     {
-        url: exports.proxyURISimple + "/*",
+        url: exports.proxyURISimpleOne + "*",
+        routing_function: forward_request_and_simplify_one,
+    },
+    {
+        url: exports.proxyURISimple + "*",
         routing_function: forward_request_and_simplify,
     },
     {
-        url: exports.proxyURI + "/*",
+        url: exports.proxyURI + "*",
         routing_function: forward_request,
     },
 ];
